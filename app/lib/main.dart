@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
-  // var selectedIndex = 0;
+  var selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +81,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: BottomNavigationBar(
                     items: [
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.home),
-                        label: 'Home',
+                        icon: Icon(Icons.auto_awesome),
+                        label: 'Ask AI',
                       ),
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.favorite),
-                        label: 'Favorites',
+                        icon: Icon(Icons.message),
+                        label: 'Message',
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(appState.isAuth
@@ -108,15 +108,15 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 SafeArea(
                   child: NavigationRail(
-                    extended: constraints.maxWidth >= 600,
+                    extended: constraints.maxWidth >= 750,
                     destinations: [
                       NavigationRailDestination(
-                        icon: Icon(Icons.home),
-                        label: Text('Home'),
+                        icon: Icon(Icons.auto_awesome),
+                        label: Text('Ask AI'),
                       ),
                       NavigationRailDestination(
-                        icon: Icon(Icons.favorite),
-                        label: Text('Favorites'),
+                        icon: Icon(Icons.message),
+                        label: Text('Message'),
                       ),
                       NavigationRailDestination(
                         icon: Icon(Icons.login),
