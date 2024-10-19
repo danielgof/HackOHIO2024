@@ -38,36 +38,26 @@ class AiPage extends StatelessWidget {
                   Expanded(
                     child: Container(
                       margin: EdgeInsets.all(16.0),
-                      child: TextField(
-                        maxLines: null,
-                        expands: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter text here',
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Add chat functionality
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.message, // chat icon
+                            size: 100.0,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ],
-              ),
-            ),
-            // Submit Button
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Add submit functionality
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 32.0),
-                  child: Text('Submit'),
-                ),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
               ),
             ),
           ],
