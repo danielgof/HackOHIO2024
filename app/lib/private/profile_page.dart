@@ -92,7 +92,7 @@ class ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 10),
                   ClipOval(
                     child: Image.asset(
-                      'assets/brutus_buckeye.jpeg', // Assuming the image is stored in the assets folder
+                      'assets/IMG_7421.png', // Assuming the image is stored in the assets folder
                       width: 80, // Adjust the width as needed
                       height: 80, // Adjust the height as needed
                     ),
