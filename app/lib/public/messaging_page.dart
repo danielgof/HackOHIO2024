@@ -71,7 +71,7 @@ class ContactTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MessagingScreen(contact: contact),
+            builder: (context) => MessagingScreen(),
           ),
         );
       },
@@ -79,25 +79,79 @@ class ContactTile extends StatelessWidget {
   }
 }
 
-class MessagingScreen extends StatelessWidget {
-  final Contact contact;
 
-  const MessagingScreen({Key? key, required this.contact}) : super(key: key);
+class MessagingScreen extends StatefulWidget {
+  @override
+  _MessagingScreenState createState() => _MessagingScreenState();
+}
+
+class _MessagingScreenState extends State<MessagingScreen> {
+  final List<MessageBubbleData> messages = [
+    MessageBubbleData(
+      text: 'Hello, this is Dr. Alice. How can I assist you today?',
+      isMe: false,
+    ),
+    MessageBubbleData(
+      text: 'Hi Dr. Alice! I have some questions about my recent test results.',
+      isMe: true,
+    ),
+    MessageBubbleData(
+      text: 'Of course! Your test results indicate everything is normal, but let’s discuss any concerns you might have.',
+      isMe: false,
+    ),
+    MessageBubbleData(
+      text: 'That’s a relief! I was worried about my cholesterol levels.',
+      isMe: true,
+    ),
+    MessageBubbleData(
+      text: 'Your test results are ready.',
+      isMe: false,
+    ),
+    // You can add more initial messages here
+  ];
+
+  void _sendMessage(String text) {
+    if (text.isNotEmpty) {
+      setState(() {
+        messages.add(MessageBubbleData(text: text, isMe: true)); // Add sent message
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(contact.name),
+        title: Text('Messages'),
         backgroundColor: const Color(0xFFdfe4d7),
       ),
-      body: Center(
-        child: Text('Chat with ${contact.name}'), // Placeholder for messaging UI
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(10.0),
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                return MessageBubble(
+                  text: messages[index].text,
+                  isMe: messages[index].isMe,
+                );
+              },
+            ),
+          ),
+          MessageInputField(onSend: _sendMessage), // Pass the callback function
+        ],
       ),
     );
   }
 }
 
+class MessageBubbleData {
+  final String text;
+  final bool isMe;
+
+  MessageBubbleData({required this.text, required this.isMe});
+}
 
 class MessageBubble extends StatelessWidget {
   final String text;
@@ -115,13 +169,13 @@ class MessageBubble extends StatelessWidget {
         padding: EdgeInsets.all(10.0),
         constraints: BoxConstraints(maxWidth: 250),
         decoration: BoxDecoration(
-          color: isMe ? Colors.blue : Colors.grey[300],
+          color: isMe ? const Color(0xFFdfe4d7) : Colors.grey[300],
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
           text,
           style: TextStyle(
-            color: isMe ? Colors.white : Colors.black,
+            color: Colors.black,
           ),
         ),
       ),
@@ -131,6 +185,9 @@ class MessageBubble extends StatelessWidget {
 
 class MessageInputField extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
+  final Function(String) onSend; // Callback function for sending messages
+
+  MessageInputField({Key? key, required this.onSend}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +216,7 @@ class MessageInputField extends StatelessWidget {
             icon: Icon(Icons.send),
             onPressed: () {
               // Handle send button pressed
-              print('Message sent: ${_controller.text}');
+              onSend(_controller.text); // Call the onSend function
               _controller.clear(); // Clear the input field
             },
           ),
