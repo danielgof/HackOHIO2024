@@ -47,8 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = FavoritesPage(
-        );
+        page = FavoritesPage();
         break;
       case 1:
         page = FavoritesPage();
