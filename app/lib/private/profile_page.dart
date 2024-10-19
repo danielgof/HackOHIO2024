@@ -22,6 +22,18 @@ class ProfilePageState extends State<ProfilePage> {
   String _sexOption = 'Male';
   var appState;
 
+  // List of health items for checkboxes
+  List<String> _healthItems = [
+    'Diabetes',
+    'High Blood Pressure',
+    'Heart Disease',
+    'Asthma',
+    'Allergies',
+  ];
+
+  // List to track which items are checked
+  late List<bool> _checkedItems;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +43,9 @@ class ProfilePageState extends State<ProfilePage> {
     _addressController = TextEditingController();
     _phoneController = TextEditingController();
     _emailController = TextEditingController();
+
+    // Initialize all health items to unchecked (false)
+    _checkedItems = List.generate(_healthItems.length, (index) => false);
   }
 
   @override
@@ -95,6 +110,7 @@ class ProfilePageState extends State<ProfilePage> {
                             border: OutlineInputBorder(),
                           ),
                         ),
+                        SizedBox(height: 10),
                         ListTile(
                           title: const Text('Male'),
                           leading: Radio<String>(
@@ -107,6 +123,7 @@ class ProfilePageState extends State<ProfilePage> {
                             },
                           ),
                         ),
+                        SizedBox(height: 10),
                         ListTile(
                           title: const Text('Female'),
                           leading: Radio<String>(
@@ -119,19 +136,19 @@ class ProfilePageState extends State<ProfilePage> {
                             },
                           ),
                         ),
+                        SizedBox(height: 10),
                         TextFormField(
                           controller: _numberController,
-                          keyboardType: TextInputType
-                              .number, // Sets the input type to numeric
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             labelText: 'Weight (LBS)',
                             border: OutlineInputBorder(),
                           ),
-                          // Optional: You can add input validation for numeric values
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                         ),
+                        SizedBox(height: 10),
                         TextFormField(
                           controller: _addressController,
                           decoration: InputDecoration(
@@ -139,30 +156,50 @@ class ProfilePageState extends State<ProfilePage> {
                             border: OutlineInputBorder(),
                           ),
                         ),
+                        SizedBox(height: 10),
                         TextFormField(
                           controller: _phoneController,
-                          keyboardType: TextInputType
-                              .number, // Sets the input type to numeric
-                          decoration: InputDecoration(
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
                             labelText: 'Phone Number',
                             border: OutlineInputBorder(),
                           ),
-                          // Optional: You can add input validation for numeric values
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                           ],
                         ),
+                        SizedBox(height: 10),
                         TextFormField(
                           controller: _emailController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Email',
                             border: OutlineInputBorder(),
                           ),
                         ),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'My Health:',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // Add checkboxes for health items
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: _healthItems.length,
+                          itemBuilder: (context, index) {
+                            return CheckboxListTile(
+                              title: Text(_healthItems[index]),
+                              value: _checkedItems[index],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _checkedItems[index] = value!;
+                                });
+                              },
+                            );
+                          },
                         ),
                       ],
                     ),
