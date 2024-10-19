@@ -6,6 +6,10 @@ plugins {
 }
 
 android {
+    compileSdkVersion 33  // Set this to the version you installed
+    defaultConfig {
+        targetSdkVersion 33  // Also update this
+    }
     namespace = "com.example.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion

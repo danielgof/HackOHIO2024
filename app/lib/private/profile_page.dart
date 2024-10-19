@@ -123,7 +123,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   title: Text(_list[index]),
                                 );
                               } else {
-                                return SizedBox
+                                return const SizedBox
                                     .shrink(); // Hide if preference is not true
                               }
                             },
