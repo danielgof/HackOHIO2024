@@ -1,22 +1,67 @@
-import 'package:english_words/english_words.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
+  bool isAuth = false;
+  var preferences = [];
+  var history = <String>[];
+  int pageSate = 0;
 
-  void getNext() {
-    current = WordPair.random();
+  void setPageSate(int page) {
+    pageSate = page;
     notifyListeners();
   }
 
-  var favorites = <WordPair>[];
+  void login() {
+    isAuth = true;
+    notifyListeners();
+  }
 
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
+  void logout() {
+    isAuth = false;
+    notifyListeners();
+  }
+
+  GlobalKey? historyListKey;
+
+  var favorites = [];
+
+  void toggleFavorite([String? recipe]) {
+    if (favorites.contains(recipe)) {
+      favorites.remove(recipe);
     } else {
-      favorites.add(current);
+      favorites.add(recipe);
     }
     notifyListeners();
   }
+
+  void removeFavorite(String pair) {
+    favorites.remove(pair);
+    notifyListeners();
+  }
+
+  void toggelPreference([List<String>? pref]) {
+    for (var element in pref!) {
+      if (pref.contains(element)) {
+        pref.remove(element);
+      }
+      pref.add(element);
+    }
+    // preferences.remove(pref);
+    notifyListeners();
+    // preferences.addAll(pref!);
+    // if (preferences.contains(pref)) {
+    //   preferences.remove(pref);
+    // } else {
+    //   preferences.add(pref);
+    // }
+    notifyListeners();
+  }
+
+  // void removePreference([List<String>? pref]) {
+  //   for (var element in pref!) {
+  //     pref.remove(element);
+  //   }
+  //   // preferences.remove(pref);
+  //   notifyListeners();
+  // }
 }
