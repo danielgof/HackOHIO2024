@@ -1,3 +1,4 @@
+import 'package:app/private/photo_page.dart';
 import 'package:app/private/profile_page.dart';
 import 'package:app/public/login_page.dart';
 import 'package:app/state.dart';
@@ -47,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = FavoritesPage();
+        page = CameraWidget();
         break;
       case 1:
         page = FavoritesPage();
