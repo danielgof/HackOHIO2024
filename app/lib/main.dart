@@ -1,6 +1,7 @@
 import 'package:app/private/photo_page.dart';
 import 'package:app/private/profile_page.dart';
 import 'package:app/public/login_page.dart';
+import 'package:app/public/messaging_page.dart';
 import 'package:app/state.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = CameraWidget();
         break;
       case 1:
-        page = FavoritesPage();
+        page = appState.isAuth == false ? FavoritesPage(): ContactsScreen();
         break;
       case 2:
         page = appState.isAuth == false ? LoginPage() : ProfilePage();
@@ -144,12 +145,6 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-
-    if (appState.favorites.isEmpty) {
-      return Center(
-        child: Text('No favorites yet.'),
-      );
-    }
 
     return ListView(
       children: [
