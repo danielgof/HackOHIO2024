@@ -6,6 +6,7 @@ import 'package:app/state.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:app/private/ai_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
         title: 'Wild Health',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 75, 251, 32)),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromARGB(255, 75, 251, 32)),
         ),
         home: MyHomePage(),
       ),
@@ -30,12 +32,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
-
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = CameraWidget();
+        page = AiPage();
         break;
       case 1:
         page = appState.isAuth == false ? FavoritesPage(): ContactsScreen();
