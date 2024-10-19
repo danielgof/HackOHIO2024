@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ContactsScreen extends StatelessWidget {
   final List<Contact> contacts = [
-    Contact(name: 'Dr. Alice Johnson, MD', lastMessage: 'Your test results are ready.'),
+    Contact(name: 'Dr. Alice Johnson, MD', lastMessage: "I’m glad to hear that! Let's keep working on a healthy diet and exercise."),
     Contact(name: 'Nurse Bob Smith', lastMessage: 'Please remember to take your medication.'),
     Contact(name: 'Dr. Charlie Brown, PhD', lastMessage: 'Can you confirm your appointment for next week?'),
     Contact(name: 'Dr. Daisy Ridley, MD', lastMessage: 'Let’s discuss your treatment options.'),
@@ -104,7 +104,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
       isMe: true,
     ),
     MessageBubbleData(
-      text: 'Your test results are ready.',
+      text: "I’m glad to hear that! Let's keep working on a healthy diet and exercise.",
       isMe: false,
     ),
     // You can add more initial messages here
