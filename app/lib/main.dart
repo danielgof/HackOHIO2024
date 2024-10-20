@@ -1,6 +1,7 @@
 import 'package:app/private/photo_page.dart';
 import 'package:app/private/profile_page.dart';
 import 'package:app/public/login_page.dart';
+import 'package:app/private/messaging_page.dart';
 import 'package:app/public/messaging_page.dart';
 import 'package:app/state.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = AiPage();
         break;
       case 1:
-        page = appState.isAuth == false ? FavoritesPage() : ContactsScreen();
+        page = appState.isAuth == false ? MessagingPagePublic() : ContactsScreen();
         break;
       case 2:
         page = appState.isAuth == false ? LoginPage() : ProfilePage();
@@ -133,28 +134,6 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         },
       ),
-    );
-  }
-}
-
-class FavoritesPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Text('You have '
-              '${appState.favorites.length} favorites:'),
-        ),
-        for (var pair in appState.favorites)
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text(pair.asLowerCase),
-          ),
-      ],
     );
   }
 }
