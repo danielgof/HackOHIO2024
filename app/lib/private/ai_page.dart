@@ -16,7 +16,7 @@ class AiPage extends StatelessWidget {
                   // Camera Button
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.all(16.0),
+                      margin: const EdgeInsets.all(16.0),
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
