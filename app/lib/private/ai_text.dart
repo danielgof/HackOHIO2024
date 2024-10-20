@@ -57,7 +57,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ask Advice')),
+      appBar: AppBar(title: const Text('Boo-boo ask')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

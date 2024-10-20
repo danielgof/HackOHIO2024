@@ -170,10 +170,10 @@ class _CameraWidgetState extends State<CameraWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('Health AI Camera'),
-        //   backgroundColor: Colors.blue,
-        // ),
+        appBar: AppBar(
+          title: const Text('Boo-boo scan'),
+          // backgroundColor: Colors.blue,
+        ),
         body: SafeArea(
           child: _buildContent(),
         ),
