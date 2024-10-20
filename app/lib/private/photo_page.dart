@@ -82,7 +82,7 @@ class _CameraWidgetState extends State<CameraWidget> {
     var headers = {
       'Content-Type': 'application/json',
       'Authorization':
-          'Bearer sk-KZH5IMALdV2J2KhmBFx_V846ABm5WaEjhepFY2t53zT3BlbkFJ0tAE082wxBTmHGjw0PsxxUrwhT3Ju3CtN-jXF5f-sA',
+          'Bearer ',
     };
 
     var response = await http.post(
