@@ -64,15 +64,18 @@ class _CameraWidgetState extends State<CameraWidget> {
     String userSex = "Male";
     String userName = "Brutus Buckeye";
     String userAge = "25";
-    String userHealthRisks = "Allregies";
+    String userHealthRisks = "Allergies";
     String txt =
-        "DESCRIPTION: you are a helpfull health AI which will analyze injurys from a photo and give advice for the user. OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written. is there an injury? IF NO RESPOND: {no injurys detected :D stay safe} IF INJURY RESPOND: BULLET POINTS - " +
+        "DESCRIPTION: you are a helpful health AI which will analyze injuries from a photo and give advice for the user. OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written. Is there an injury? IF NO RESPOND: {no injuries detected :D stay safe} IF INJURY RESPOND: BULLET POINTS - " +
             userName +
+            " " +
             userAge +
+            " " +
             userSex +
-            " HEADER[Injury Name] DESCRIPTION[brief decription no more then 10 words] IF CONTAINS CONTENTS FROM THIS LIST: " +
+            " HEADER[Injury Name] DESCRIPTION[brief description no more than 10 words] IF CONTAINS CONTENTS FROM THIS LIST: " +
             userHealthRisks +
-            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks if they can be effected by injury or if the injury was cause by the them] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] is injury serious? HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time for the user and how much faster the recovery will be if treated properly]";
+            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks if they can be affected by injury or if the injury was caused by them] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] Is the injury serious? HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time and how much faster recovery will be if treated properly]";
+    
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
     var requestBody = {
       "model": "gpt-4o-mini",
@@ -96,7 +99,7 @@ class _CameraWidgetState extends State<CameraWidget> {
 
     var headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ',
+      'Authorization': 'Bearer sk-KZH5IMALdV2J2KhmBFx_V846ABm5WaEjhepFY2t53zT3BlbkFJ0tAE082wxBTmHGjw0PsxxUrwhT3Ju3CtN-jXF5f-sA',
     };
 
     var response = await http.post(
@@ -167,7 +170,10 @@ class _CameraWidgetState extends State<CameraWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('Camera Input')),
+        // appBar: AppBar(
+        //   title: const Text('Health AI Camera'),
+        //   backgroundColor: Colors.blue,
+        // ),
         body: SafeArea(
           child: _buildContent(),
         ),
@@ -194,16 +200,12 @@ class _CameraWidgetState extends State<CameraWidget> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Center the preview in the column
-            crossAxisAlignment:
-                CrossAxisAlignment.center, // Ensure horizontal centering
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Wrapping with Center ensures the preview is centered
               Center(
                 child: Container(
                   height: 400,
-                  width: 300, // You can adjust this for different screen sizes
+                  width: MediaQuery.of(context).size.width * 0.9, // Responsive width
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.0),
                     boxShadow: [
@@ -224,16 +226,16 @@ class _CameraWidgetState extends State<CameraWidget> {
               ElevatedButton(
                 onPressed: _takePicture,
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.green,
-                  padding:
-                      EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.0),
                   ),
                   elevation: 10.0,
-                  shadowColor: Colors.greenAccent,
+                  shadowColor: Colors.blueAccent,
                 ),
-                child: Icon(Icons.camera_alt, size: 50.0, color: Colors.green),
+                child: Icon(Icons.camera_alt, size: 50.0),
               ),
             ],
           );
@@ -252,29 +254,47 @@ class _CameraWidgetState extends State<CameraWidget> {
 
   Widget _buildResponsePage() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            response,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Analysis Result",
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              response,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black87,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: setCameraPage,
+              icon: Icon(Icons.home, color: Colors.white),
+              label: Text('Retake', style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                  )),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 32.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0),
                 ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setCameraPage();
-            },
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
               ),
             ),
-            child: const Icon(Icons.home, size: 100.0, color: Colors.green),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
