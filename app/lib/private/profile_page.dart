@@ -38,14 +38,17 @@ class ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _fullNameController = TextEditingController(); // Initialize the controller
-    _numberController = TextEditingController();
-    _addressController = TextEditingController();
-    _phoneController = TextEditingController();
-    _emailController = TextEditingController();
+    _fullNameController = TextEditingController(
+        text: 'Brutus Buckeye'); // Initialize the controller
+    _numberController = TextEditingController(text: '135');
+    _addressController = TextEditingController(text: '100 Norwich Ave');
+    _phoneController = TextEditingController(text: '1234567890');
+    _emailController =
+        TextEditingController(text: 'buckeye.1@buckeyemail.osu.edu');
 
     // Initialize all health items to unchecked (false)
     _checkedItems = List.generate(_healthItems.length, (index) => false);
+    _checkedItems[4] = true;
   }
 
   @override
@@ -183,8 +186,6 @@ class ProfilePageState extends State<ProfilePage> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 10),
-
-                        // Add checkboxes for health items
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
