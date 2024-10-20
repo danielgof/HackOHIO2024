@@ -230,7 +230,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   _toggleEditPreferences(_isVisible);
                                 },
                                 icon: Icon(Icons.edit), // Adding an icon
-                                label: Text('Edit Information'),
+                                label: Text('Save Edits'),
                               ),
                               ElevatedButton.icon(
                                 onPressed: () {
