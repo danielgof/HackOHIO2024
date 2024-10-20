@@ -8,7 +8,8 @@ class AiPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('Input Options Page')),
+        backgroundColor: Colors.white,
+        appBar: AppBar(title: Text('Camera Input Page')),
         body: Column(
           children: [
             // Top section with Camera and Text buttons
@@ -54,7 +55,8 @@ class AiPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ChatWidget(), // Navigate to ChatWidget
+                              builder: (context) =>
+                                  ChatWidget(), // Navigate to ChatWidget
                             ),
                           );
                         },
