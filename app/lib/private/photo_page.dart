@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:camera/camera.dart';
 import 'package:app/state.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import 'dart:io';
 
 class CameraWidget extends StatefulWidget {
@@ -12,8 +12,8 @@ class CameraWidget extends StatefulWidget {
 
 class _CameraWidgetState extends State<CameraWidget> {
   File? _image;
-  // late String imagePath;
-  // late String response;
+  late String imagePath;
+  late String response;
 
   late CameraController _cameraController;
   late List<CameraDescription> _cameras;
@@ -32,6 +32,87 @@ class _CameraWidgetState extends State<CameraWidget> {
     await _cameraController.initialize();
     setState(() {}); // Rebuild to show the camera preview
   }
+
+  Future<void> _sendFileToServer(MyAppState state) async {
+    File imageFile = File(imagePath);
+    List<int> imageData = await imageFile.readAsBytes();
+    // Convert bytes to base64
+    String base64Image = base64Encode(imageData);
+    String result = state.preferences.toString();
+    // print(result);
+    // print(base64Image);
+
+    var url = Uri.parse('https://api.openai.com/v1/chat/completions');
+    var requestBody = {
+      "model": "gpt-4-vision-preview",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written"
+                      "Is it food? IF NO RESPOND: {DO NOT EAT THAT [OBJECT]}" +
+                  "IF FOOD RESPOND:" +
+                  "HEADER[Food Name]" +
+                  "DESCRIPTION[brief decription no more then 10 words]" +
+                  "IF CONTAINS CONTENTS FROM THIS LIST: " +
+                  result +
+                  " HEADER{Your Allergens Detected:} + BULLET POINTS - [bullet points of allergens from the list]"
+                      "HEADER{Other Potential Allergens:}" +
+                  "BULLET POINTS - [bullet point specific food items or contents it is made out of that may cause allergies]" +
+                  "HEADER{Estimated Caloric Content:}" +
+                  "BULLET POINTS[Number of same food items if countable and estimated calloriesfor each]" +
+                  "HEADER{Total Calories:}" +
+                  "BULLET POINT[Estimate total calories of the all the foods]" +
+                  "DESCRIPTION[Potential health beneifts and risks of the foods no more then 50 words]"
+            },
+            {
+              "type": "image_url",
+              "image_url": {"url": "data:image/jpeg;base64,$base64Image"}
+            }
+          ]
+        }
+      ],
+      "max_tokens": 300
+    };
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          'Bearer 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',
+    };
+
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(requestBody),
+    );
+
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+    if (response.statusCode == 200) {
+      setResult(jsonDecode(response.body)['choices'][0]['message']['content']);
+      print(
+          'Response body: ${jsonDecode(response.body)['choices'][0]['message']['content']}');
+      setResponsePage();
+    } else {
+      print('Request failed with status: ${response.statusCode}');
+      print(response.body);
+    }
+  }
+
+  void setResponsePage() {
+    setState(() {
+      // state = PageType.ResponsePage;
+    });
+  }
+
+  void setResult(String res) {
+    setState(() {
+      // response = res;
+    });
+  }
+
 
   // Take a picture
   Future<void> _takePicture() async {
