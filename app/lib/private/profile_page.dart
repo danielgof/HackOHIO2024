@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   State<ProfilePage> createState() => ProfilePageState();
@@ -76,7 +76,7 @@ class ProfilePageState extends State<ProfilePage> {
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent),
+                          color: Colors.green),
                     ),
                     SizedBox(height: 20),
                     ClipOval(
@@ -101,6 +101,19 @@ class ProfilePageState extends State<ProfilePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      _toggleEditPreferences(_isVisible);
+                                    },
+                                    label: Text('Close'),
+                                    icon: Icon(Icons.close),
+                                    iconAlignment: IconAlignment.start,
+                                  ),
+                                ],
+                              ),
                               Text(
                                 'My Info:',
                                 style: TextStyle(
@@ -229,50 +242,48 @@ class ProfilePageState extends State<ProfilePage> {
                                 onPressed: () {
                                   _toggleEditPreferences(_isVisible);
                                 },
-                                icon: Icon(Icons.edit), // Adding an icon
+                                icon: Icon(Icons.edit),
                                 label: Text('Edit Information'),
                               ),
                               ElevatedButton.icon(
                                 onPressed: () {
                                   appState.logout();
                                 },
-                                icon: Icon(Icons.logout), // Adding an icon
+                                icon: Icon(Icons.logout),
                                 label: Text('Logout'),
                               ),
                             ],
                           ),
                           SizedBox(
                               height:
-                                  10), // Add some space between buttons and text
+                                  20), // Increased space between buttons and text
                           Text(
                             'My Profile:',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 24, // Larger font size for emphasis
                               fontWeight: FontWeight.bold,
+                              color:
+                                  Colors.green, // Changed color for visibility
                             ),
                           ),
-                          Text(
-                            'Name: ' + _fullNameController.text,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          Text(
-                            'Sex: ' + _sexOption,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          Text(
-                            'Email: ' + _emailController.text,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          Text(
-                            'Phone: ' + _phoneController.text,
-                            style: TextStyle(
-                              fontSize: 20,
+                          SizedBox(height: 10), // Spacing
+                          Card(
+                            elevation: 3, // Add slight elevation
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  16.0), // Padding inside the card
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _buildProfileDetail(
+                                      'Name:', _fullNameController.text),
+                                  _buildProfileDetail('Sex:', _sexOption),
+                                  _buildProfileDetail(
+                                      'Email:', _emailController.text),
+                                  _buildProfileDetail(
+                                      'Phone:', _phoneController.text),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -284,6 +295,25 @@ class ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildProfileDetail(String title, String detail) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            detail,
+            style: TextStyle(fontSize: 18),
+          ),
+        ],
       ),
     );
   }

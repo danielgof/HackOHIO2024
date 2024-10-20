@@ -2,30 +2,42 @@ import 'package:flutter/material.dart';
 
 class ContactsScreen extends StatelessWidget {
   final List<Contact> contacts = [
-    Contact(name: 'Dr. Alice Johnson, MD', lastMessage: "I’m glad to hear that! Let's keep working on a healthy diet and exercise."),
-    Contact(name: 'Nurse Bob Smith', lastMessage: 'Please remember to take your medication.'),
-    Contact(name: 'Dr. Charlie Brown, PhD', lastMessage: 'Can you confirm your appointment for next week?'),
-    Contact(name: 'Dr. Daisy Ridley, MD', lastMessage: 'Let’s discuss your treatment options.'),
+    Contact(
+        name: 'Dr. Alice Johnson, MD',
+        lastMessage:
+            "I’m glad to hear that! Let's keep working on a healthy diet and exercise."),
+    Contact(
+        name: 'Nurse Bob Smith',
+        lastMessage: 'Please remember to take your medication.'),
+    Contact(
+        name: 'Dr. Charlie Brown, PhD',
+        lastMessage: 'Can you confirm your appointment for next week?'),
+    Contact(
+        name: 'Dr. Daisy Ridley, MD',
+        lastMessage: 'Let’s discuss your treatment options.'),
     // Add more contacts as needed
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFdfe4d7),
+      backgroundColor:
+          const Color(0xFFf5f5f5), // Lighter background color for contrast
       appBar: AppBar(
-        title: Text('Messages'),
+        title: Text('Messages',
+            style: TextStyle(color: Colors.black)), // Change title color
         backgroundColor: const Color(0xFFdfe4d7),
         shape: const Border(
           bottom: BorderSide(
-            color: Color.fromARGB(255, 214, 211, 211), // Set the color of the bottom border
-            width: 1.0, // Set the width of the border
+            color: Color.fromARGB(255, 214, 211, 211),
+            width: 1.0,
           ),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.add), // Plus icon
+            icon: Icon(Icons.add, color: Colors.black), // Change icon color
             onPressed: () {
+              // Add functionality here
             },
           ),
         ],
@@ -60,14 +72,16 @@ class ContactTile extends StatelessWidget {
     return ListTile(
       shape: const Border(
         bottom: BorderSide(
-          color: Color.fromARGB(255, 214, 211, 211), // Set the color of the bottom border
-          width: 1.0, // Set the width of the border
+          color: Color.fromARGB(255, 214, 211, 211),
+          width: 1.0,
         ),
       ),
-      title: Text(contact.name),
-      subtitle: Text(contact.lastMessage),
+      title: Text(contact.name,
+          style: TextStyle(fontWeight: FontWeight.bold)), // Bold name
+      subtitle: Text(contact.lastMessage,
+          style: TextStyle(
+              color: Colors.grey[600])), // Grey color for last message
       onTap: () {
-        // Navigate to the messaging screen for this contact
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -78,7 +92,6 @@ class ContactTile extends StatelessWidget {
     );
   }
 }
-
 
 class MessagingScreen extends StatefulWidget {
   @override
@@ -96,7 +109,8 @@ class _MessagingScreenState extends State<MessagingScreen> {
       isMe: true,
     ),
     MessageBubbleData(
-      text: 'Of course! Your test results indicate everything is normal, but let’s discuss any concerns you might have.',
+      text:
+          'Of course! Your test results indicate everything is normal, but let’s discuss any concerns you might have.',
       isMe: false,
     ),
     MessageBubbleData(
@@ -104,16 +118,17 @@ class _MessagingScreenState extends State<MessagingScreen> {
       isMe: true,
     ),
     MessageBubbleData(
-      text: "I’m glad to hear that! Let's keep working on a healthy diet and exercise.",
+      text:
+          "I’m glad to hear that! Let's keep working on a healthy diet and exercise.",
       isMe: false,
     ),
-    // You can add more initial messages here
   ];
 
   void _sendMessage(String text) {
     if (text.isNotEmpty) {
       setState(() {
-        messages.add(MessageBubbleData(text: text, isMe: true)); // Add sent message
+        messages
+            .add(MessageBubbleData(text: text, isMe: true)); // Add sent message
       });
     }
   }
@@ -122,14 +137,16 @@ class _MessagingScreenState extends State<MessagingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Messages'),
+        title: Text('Messages',
+            style: TextStyle(color: Colors.black)), // Change title color
         backgroundColor: const Color(0xFFdfe4d7),
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.all(10.0),
+              padding:
+                  EdgeInsets.symmetric(vertical: 10.0), // Add vertical padding
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 return MessageBubble(
@@ -171,6 +188,9 @@ class MessageBubble extends StatelessWidget {
         decoration: BoxDecoration(
           color: isMe ? const Color(0xFFdfe4d7) : Colors.grey[300],
           borderRadius: BorderRadius.circular(12),
+          boxShadow: isMe
+              ? [BoxShadow(color: Colors.black26, blurRadius: 4.0)]
+              : [], // Add shadow to messages from user
         ),
         child: Text(
           text,
@@ -209,13 +229,15 @@ class MessageInputField extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: Colors.white,
+                contentPadding: EdgeInsets.symmetric(
+                    horizontal: 20.0), // Padding inside text field
               ),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.send),
+            icon:
+                Icon(Icons.send, color: Colors.green), // Change send icon color
             onPressed: () {
-              // Handle send button pressed
               onSend(_controller.text); // Call the onSend function
               _controller.clear(); // Clear the input field
             },

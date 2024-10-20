@@ -1,5 +1,6 @@
 import 'package:app/private/photo_page.dart';
 import 'package:flutter/material.dart';
+import 'package:app/private/ai_text.dart';
 
 class AiPage extends StatelessWidget {
   @override
@@ -32,10 +33,9 @@ class AiPage extends StatelessWidget {
                           ),
                         ),
                         child: Center(
-                          child: Icon(
-                            Icons.camera_alt, // Camera icon
-                            size: 100.0,
-                          ),
+                          child: Icon(Icons.camera_alt, // Camera icon
+                              size: 100.0,
+                              color: Colors.green),
                         ),
                       ),
                     ),
@@ -46,7 +46,12 @@ class AiPage extends StatelessWidget {
                       margin: EdgeInsets.all(16.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Add chat functionality
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatWidget(), // Navigate to ChatWidget
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -55,10 +60,9 @@ class AiPage extends StatelessWidget {
                           ),
                         ),
                         child: Center(
-                          child: Icon(
-                            Icons.message, // chat icon
-                            size: 100.0,
-                          ),
+                          child: Icon(Icons.message, // chat icon
+                              size: 100.0,
+                              color: Colors.green),
                         ),
                       ),
                     ),
