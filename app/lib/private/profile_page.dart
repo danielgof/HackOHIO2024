@@ -101,6 +101,21 @@ class ProfilePageState extends State<ProfilePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .end, // Aligns content to the end (right)
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      _toggleEditPreferences(_isVisible);
+                                    },
+                                    label: Text('Close'),
+                                    icon: Icon(Icons
+                                        .close), // You might want to use an icon for "X"
+                                    iconAlignment: IconAlignment.start,
+                                  ),
+                                ],
+                              ),
                               Text(
                                 'My Info:',
                                 style: TextStyle(
