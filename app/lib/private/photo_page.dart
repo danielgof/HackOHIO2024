@@ -1,9 +1,8 @@
-import 'dart:convert';
+import 'dart:convert'; // For Base64 encoding
+import 'dart:io'; // For File I/O
 import 'package:camera/camera.dart';
-import 'package:app/state.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:io';
+import 'package:http/http.dart' as http; // To make the HTTP request
 
 class CameraWidget extends StatefulWidget {
   @override
@@ -11,37 +10,45 @@ class CameraWidget extends StatefulWidget {
 }
 
 class _CameraWidgetState extends State<CameraWidget> {
-  File? _image;
-  late String imagePath;
-  late String response;
-
-  late CameraController _cameraController;
-  late List<CameraDescription> _cameras;
-  XFile? _pictureFile;
+  CameraController? _controller;
+  List<CameraDescription>? cameras;
+  XFile? imageFile;
 
   @override
   void initState() {
     super.initState();
-    _initCamera();
+    _initializeCamera();
   }
 
-  // Initialize the camera
-  Future<void> _initCamera() async {
-    _cameras = await availableCameras();
-    _cameraController = CameraController(_cameras[0], ResolutionPreset.high);
-    await _cameraController.initialize();
-    setState(() {}); // Rebuild to show the camera preview
+  Future<void> _initializeCamera() async {
+    // Get the list of available cameras
+    cameras = await availableCameras();
+
+    if (cameras != null && cameras!.isNotEmpty) {
+      // Initialize the first available camera
+      _controller = CameraController(cameras![0], ResolutionPreset.high);
+      await _controller?.initialize();
+
+      if (!mounted) return;
+
+      setState(() {});
+    }
   }
 
-  Future<void> _sendFileToServer(MyAppState state) async {
-    File imageFile = File(imagePath);
-    List<int> imageData = await imageFile.readAsBytes();
-    // Convert bytes to base64
-    String base64Image = base64Encode(imageData);
-    String result = state.preferences.toString();
-    // print(result);
-    // print(base64Image);
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
 
+  // Convert image to Base64 string
+  Future<String> _convertImageToBase64(XFile image) async {
+    final bytes = await File(image.path).readAsBytes(); // Read file as bytes
+    return base64Encode(bytes); // Convert to Base64 string
+  }
+
+  // Send Base64 string to ChatGPT API
+  Future<void> _sendToChatGPT(String base64Image) async {
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
     var requestBody = {
       "model": "gpt-4-vision-preview",
@@ -89,15 +96,10 @@ class _CameraWidgetState extends State<CameraWidget> {
       body: jsonEncode(requestBody),
     );
 
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
     if (response.statusCode == 200) {
-      setResult(jsonDecode(response.body)['choices'][0]['message']['content']);
-      print(
-          'Response body: ${jsonDecode(response.body)['choices'][0]['message']['content']}');
-      setResponsePage();
+      print('ChatGPT Response: ${response.body}');
     } else {
-      print('Request failed with status: ${response.statusCode}');
-      print(response.body);
+      print('Error: ${response.statusCode}');
     }
   }
 
@@ -115,46 +117,51 @@ class _CameraWidgetState extends State<CameraWidget> {
 
   // Take a picture
   Future<void> _takePicture() async {
-    if (!_cameraController.value.isInitialized) {
+    if (_controller == null || !_controller!.value.isInitialized) {
       return;
     }
 
     try {
-      final image = await _cameraController.takePicture();
+      // Take a picture
+      final image = await _controller!.takePicture();
       setState(() {
-        _pictureFile = image;
+        imageFile = image;
       });
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
 
-  @override
-  void dispose() {
-    _cameraController.dispose();
-    super.dispose();
+      // Convert image to Base64 and send to ChatGPT
+      final base64Image = await _convertImageToBase64(image);
+      await _sendToChatGPT(base64Image);
+    } catch (e) {
+      print('Error taking picture: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Camera Example'),
+        title: const Text('Take a picture here'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _image != null
-                ? Image.file(_image!) // Display the image
-                : Text('No image selected.'),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Take Picture'),
+      body: Column(
+        children: [
+          Center(
+            child: Expanded(
+              child: _controller != null && _controller!.value.isInitialized
+                  ? CameraPreview(_controller!)
+                  : const Center(child: CircularProgressIndicator()),
             ),
-          ],
-        ),
+          ),
+          if (imageFile != null)
+            Image.file(
+              File(imageFile!.path),
+              width: 100,
+              height: 100,
+            ),
+          ElevatedButton(
+            onPressed: _takePicture,
+            child: Text('Capture Image'),
+          ),
+        ],
       ),
     );
   }

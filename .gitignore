@@ -1,3 +1,5 @@
-venv
+.vscode
+.ideavenv
 
 .vscode/settings.json
+neural/venv

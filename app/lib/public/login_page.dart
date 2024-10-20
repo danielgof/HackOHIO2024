@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
+              const Text(
                 'Welcome to Wild Health',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Card(
                 elevation: 5,
                 shape: RoundedRectangleBorder(
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.grey.shade200,
                         ),
                         child: const Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
                           child: TextField(
                             decoration: InputDecoration(
                               hintText: 'Username',
@@ -73,14 +73,14 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(32),
                           color: Colors.grey.shade200,
                         ),
                         child: const Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
                           child: TextField(
                             obscureText: true,
                             decoration: InputDecoration(
@@ -108,17 +108,17 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton.icon(
                         onPressed: () {
                           appState.login();
                         },
-                        icon: Padding(
-                          padding: const EdgeInsets.only(left: 8),  // Padding around the icon
+                        icon: const Padding(
+                          padding: EdgeInsets.only(left: 8),  // Padding around the icon
                           child: Icon(Icons.arrow_forward),
                         ),
-                        label: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),  // Padding around the text
+                        label: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),  // Padding around the text
                           child: Text('Login'),
                         ),
                         style: ElevatedButton.styleFrom(
