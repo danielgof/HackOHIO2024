@@ -105,14 +105,6 @@ train_x, train_y = read_dataset(pd_data, [1, 2, 3])
 valid_x, valid_y = read_dataset(pd_data, [4])
 test_x, test_y = read_dataset(pd_data, [5])
 
-f = open('output.txt', 'a')
-np.save('train_x.npy', train_x) 
-np.save('train_y.npy', train_y) 
-np.save('valid_x.npy', valid_x) 
-np.save('valid_y.npy', train_y) 
-np.save('test_x.npy', test_x) 
-np.save('test_y.npy', test_y) 
-
 
 model1d = keras.Sequential(
     [
