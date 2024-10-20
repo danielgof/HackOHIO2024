@@ -245,10 +245,34 @@ class ProfilePageState extends State<ProfilePage> {
                               height:
                                   10), // Add some space between buttons and text
                           Text(
-                            'INFORMATION',
+                            'My Profile:',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            'Name: ' + _fullNameController.text,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            'Sex: ' + _sexOption,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            'Email: ' + _emailController.text,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          Text(
+                            'Phone: ' + _phoneController.text,
+                            style: TextStyle(
+                              fontSize: 20,
                             ),
                           ),
                         ],
