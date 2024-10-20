@@ -2,21 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: ChatWidget(),
-//     );
-//   }
-// }
-
-enum PageType {
-  CameraPage,
-  PicutrePage,
-  WaitPage,
-  ResponsePage;
-}
 
 class ChatWidget extends StatefulWidget {
   @override
@@ -28,38 +13,40 @@ class _ChatWidgetState extends State<ChatWidget> {
   final List<Message> _messages = []; // List to hold messages
   String? apiKey;
 
-
   Future<void> sendMessage(String message) async {
     // Add user message to the list
     setState(() {
       _messages.add(Message(content: message, isUser: true));
     });
 
-  final formattedMessage = 'As a medical professional, please respond to the following inquiry: $message';
+    final formattedMessage =
+        'As a medical professional, please respond to the following inquiry: $message';
 
-  final response = await http.post(
-    Uri.parse('https://api.openai.com/v1/chat/completions'),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ', // Use your API key
-    },
-    body: json.encode({
-      'model': 'gpt-4o-mini', // Make sure this is a valid model
-      'messages': [
-        {'role': 'user', 'content': formattedMessage},
-      ],
-    }),
-  );
+    final response = await http.post(
+      Uri.parse('https://api.openai.com/v1/chat/completions'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ', // Use your API key
+      },
+      body: json.encode({
+        'model': 'gpt-4o-mini', // Make sure this is a valid model
+        'messages': [
+          {'role': 'user', 'content': formattedMessage},
+        ],
+      }),
+    );
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       // Add ChatGPT's response to the list
       setState(() {
-        _messages.add(Message(content: data['choices'][0]['message']['content'], isUser: false));
+        _messages.add(Message(
+            content: data['choices'][0]['message']['content'], isUser: false));
       });
     } else {
       setState(() {
-        _messages.add(Message(content: 'Error: ${response.statusCode}', isUser: false));
+        _messages.add(
+            Message(content: 'Error: ${response.statusCode}', isUser: false));
       });
     }
   }
@@ -76,7 +63,9 @@ class _ChatWidgetState extends State<ChatWidget> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _messages.map((message) => _buildMessageBubble(message)).toList(),
+                  children: _messages
+                      .map((message) => _buildMessageBubble(message))
+                      .toList(),
                 ),
               ),
             ),
@@ -105,9 +94,13 @@ class _ChatWidgetState extends State<ChatWidget> {
   // Method to build message bubbles
   Widget _buildMessageBubble(Message message) {
     return Align(
-      alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft, // Align based on user
+      alignment: message.isUser
+          ? Alignment.centerRight
+          : Alignment.centerLeft, // Align based on user
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), // Add horizontal margin for spacing
+        margin: EdgeInsets.symmetric(
+            vertical: 4.0,
+            horizontal: 8.0), // Add horizontal margin for spacing
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           color: message.isUser ? Colors.blue : Colors.grey[300],
@@ -129,4 +122,3 @@ class Message {
 
   Message({required this.content, required this.isUser});
 }
-
