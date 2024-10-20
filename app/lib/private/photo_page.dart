@@ -234,7 +234,7 @@ class _CameraWidgetState extends State<CameraWidget> {
                   elevation: 10.0,
                   shadowColor: Colors.greenAccent,
                 ),
-                child: Icon(Icons.camera_alt, size: 50.0, color: Colors.green),
+                child: Icon(Icons.camera_alt, size: 50.0,),
               ),
             ],
           );
