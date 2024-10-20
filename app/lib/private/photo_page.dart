@@ -66,13 +66,13 @@ class _CameraWidgetState extends State<CameraWidget> {
     String userAge = "";
     String userHealthRisks = "";
     String txt =
-        "DESCRIPTION: you are a helpfull health AI which will analyze injurys from a photo and give advice for the user OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written is there an injury? IF NO RESPOND: {no injurys detected :D stay safe} IF INJURY RESPOND: BULLET POINTS - " +
+        "DESCRIPTION: you are a helpfull health AI which will analyze injurys from a photo and give advice for the user. OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written. is there an injury? IF NO RESPOND: {no injurys detected :D stay safe} IF INJURY RESPOND: BULLET POINTS - " +
             userName +
             userAge +
             userSex +
             " HEADER[Injury Name] DESCRIPTION[brief decription no more then 10 words] IF CONTAINS CONTENTS FROM THIS LIST: " +
             userHealthRisks +
-            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks from the list] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] is injury serious? IF YES RESPONS: HEADER{THIS IS A SERIOUS INJURY CALL 911 IMIDIETLY} HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time for the user and how much faster the recovery will be if treated properly]";
+            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks from the list] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] is injury serious? HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time for the user and how much faster the recovery will be if treated properly]";
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
     var requestBody = {
       "model": "gpt-4o-mini",
@@ -96,8 +96,7 @@ class _CameraWidgetState extends State<CameraWidget> {
 
     var headers = {
       'Content-Type': 'application/json',
-      'Authorization':
-          'Bearer ',
+      'Authorization': 'Bearer ',
     };
 
     var response = await http.post(
@@ -188,7 +187,6 @@ class _CameraWidgetState extends State<CameraWidget> {
         return Container();
     }
   }
-
 
   Widget _buildCameraPreview() {
     return FutureBuilder<void>(
