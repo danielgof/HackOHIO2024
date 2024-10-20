@@ -32,10 +32,9 @@ class AiPage extends StatelessWidget {
                           ),
                         ),
                         child: Center(
-                          child: Icon(
-                            Icons.camera_alt, // Camera icon
-                            size: 100.0,
-                          ),
+                          child: Icon(Icons.camera_alt, // Camera icon
+                              size: 100.0,
+                              color: Colors.green),
                         ),
                       ),
                     ),
@@ -55,10 +54,9 @@ class AiPage extends StatelessWidget {
                           ),
                         ),
                         child: Center(
-                          child: Icon(
-                            Icons.message, // chat icon
-                            size: 100.0,
-                          ),
+                          child: Icon(Icons.message, // chat icon
+                              size: 100.0,
+                              color: Colors.green),
                         ),
                       ),
                     ),
