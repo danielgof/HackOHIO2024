@@ -1,5 +1,5 @@
-import 'dart:convert';  // For Base64 encoding
-import 'dart:io';       // For File I/O
+import 'dart:convert'; // For Base64 encoding
+import 'dart:io'; // For File I/O
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; // To make the HTTP request
@@ -49,21 +49,50 @@ class _CameraWidgetState extends State<CameraWidget> {
 
   // Send Base64 string to ChatGPT API
   Future<void> _sendToChatGPT(String base64Image) async {
-    // print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    // print(base64Image);
-    // print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/chat/completions'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ',
-      },
-      body: json.encode({
-        'model': 'gpt-4o',
-        'messages': [
-          {'role': 'user', 'content': 'This is an image in Base64: $base64Image'},
-        ],
-      }),
+    String userSex = "";
+    String userName = "";
+    String userAge = "";
+    String userHealthRisks = "";
+
+    String txt =
+        "DESCRIPTION: you are a helpfull health AI which will analyze injurys from a photo and give advice for the user OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written is there an injury? IF NO RESPOND: {no injurys detected :D stay safe} IF INJURY RESPOND: BULLET POINTS - " +
+            userName +
+            userAge +
+            userSex +
+            " HEADER[Injury Name] DESCRIPTION[brief decription no more then 10 words] IF CONTAINS CONTENTS FROM THIS LIST: " +
+            userHealthRisks +
+            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks from the list] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] is injury serious? IF YES RESPONS: HEADER{THIS IS A SERIOUS INJURY CALL 911 IMIDIETLY} HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time for the user and how much faster the recovery will be if treated properly]";
+    var url = Uri.parse('https://api.openai.com/v1/chat/completions');
+    var requestBody = {
+      "model": "gpt-4o-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": txt,
+            },
+            {
+              "type": "image_url",
+              "image_url": {"url": "data:image/jpeg;base64,$base64Image"}
+            }
+          ]
+        }
+      ],
+      "max_tokens": 300
+    };
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization':
+          'Bearer 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',
+    };
+
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(requestBody),
     );
 
     if (response.statusCode == 200) {
@@ -74,6 +103,19 @@ class _CameraWidgetState extends State<CameraWidget> {
     }
   }
 
+  void setResponsePage() {
+    setState(() {
+      // state = PageType.ResponsePage;
+    });
+  }
+
+  void setResult(String res) {
+    setState(() {
+      // response = res;
+    });
+  }
+
+  // Take a picture
   Future<void> _takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) {
       return;
