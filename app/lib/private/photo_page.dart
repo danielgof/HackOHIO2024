@@ -74,8 +74,8 @@ class _CameraWidgetState extends State<CameraWidget> {
             userSex +
             " HEADER[Injury Name] DESCRIPTION[brief description no more than 10 words] IF CONTAINS CONTENTS FROM THIS LIST: " +
             userHealthRisks +
-            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks if they can be affected by injury or if the injury was caused by them] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] Is the injury serious? HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time and how much faster recovery will be if treated properly]";
-    
+            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks if they can be affected by injury or if the injury was caused by them] HEADER{Treatment:} BULLET POINTS - [steps to take to treat the injury] Is the injury serious? HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time and how much faster recovery will be if treated properly]";
+
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
     var requestBody = {
       "model": "gpt-4o-mini",
@@ -99,7 +99,8 @@ class _CameraWidgetState extends State<CameraWidget> {
 
     var headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer sk-KZH5IMALdV2J2KhmBFx_V846ABm5WaEjhepFY2t53zT3BlbkFJ0tAE082wxBTmHGjw0PsxxUrwhT3Ju3CtN-jXF5f-sA',
+      'Authorization':
+          'Bearer sk-KZH5IMALdV2J2KhmBFx_V846ABm5WaEjhepFY2t53zT3BlbkFJ0tAE082wxBTmHGjw0PsxxUrwhT3Ju3CtN-jXF5f-sA',
     };
 
     var response = await http.post(
@@ -172,7 +173,7 @@ class _CameraWidgetState extends State<CameraWidget> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Boo-boo scan'),
-          // backgroundColor: Colors.blue,
+          // backgroundColor: Colors.green,
         ),
         body: SafeArea(
           child: _buildContent(),
@@ -205,7 +206,8 @@ class _CameraWidgetState extends State<CameraWidget> {
               Center(
                 child: Container(
                   height: 400,
-                  width: MediaQuery.of(context).size.width * 0.9, // Responsive width
+                  width: MediaQuery.of(context).size.width *
+                      0.9, // Responsive width
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16.0),
                     boxShadow: [
@@ -226,14 +228,15 @@ class _CameraWidgetState extends State<CameraWidget> {
               ElevatedButton(
                 onPressed: _takePicture,
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+                  foregroundColor: Colors.grey.shade200,
+                  backgroundColor: Colors.green,
+                  padding:
+                      EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.0),
                   ),
                   elevation: 10.0,
-                  shadowColor: Colors.blueAccent,
+                  shadowColor: Colors.greenAccent,
                 ),
                 child: Icon(Icons.camera_alt, size: 50.0),
               ),
@@ -247,8 +250,28 @@ class _CameraWidgetState extends State<CameraWidget> {
   }
 
   Widget _buildWaitPage() {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
+    return Scaffold(
+      backgroundColor: Colors.white, // Match background with Login Page
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.green), // Green indicator
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Loading, please wait...',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -263,7 +286,7 @@ class _CameraWidgetState extends State<CameraWidget> {
               "Analysis Result",
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue,
+                    color: Colors.green,
                   ),
             ),
             SizedBox(height: 10),
@@ -280,13 +303,14 @@ class _CameraWidgetState extends State<CameraWidget> {
             ElevatedButton.icon(
               onPressed: setCameraPage,
               icon: Icon(Icons.home, color: Colors.white),
-              label: Text('Retake', style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 16,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                  )),
+              label: Text('Retake',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.white,
+                      )),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.green,
                 padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 32.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0),

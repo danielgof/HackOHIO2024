@@ -8,9 +8,10 @@ class AiPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade200,
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
+          mainAxisAlignment:
+              MainAxisAlignment.spaceBetween, // Space between widgets
           children: [
             // Top section with Camera and Text buttons
             Expanded(
@@ -46,9 +47,10 @@ class AiPage extends StatelessWidget {
                             Icon(
                               Icons.camera_alt,
                               size: 80.0,
-                              color: Colors.blueAccent,
+                              color: Colors.green,
                             ),
-                            SizedBox(height: 8.0), // Space between icon and text
+                            SizedBox(
+                                height: 8.0), // Space between icon and text
                             Text(
                               'Camera',
                               style: TextStyle(
@@ -90,9 +92,10 @@ class AiPage extends StatelessWidget {
                             Icon(
                               Icons.message,
                               size: 80.0,
-                              color: Colors.blueAccent,
+                              color: Colors.green,
                             ),
-                            SizedBox(height: 8.0), // Space between icon and text
+                            SizedBox(
+                                height: 8.0), // Space between icon and text
                             Text(
                               'Text Input',
                               style: TextStyle(
@@ -136,7 +139,7 @@ class AiPage extends StatelessWidget {
                         Icon(
                           Icons.mic,
                           size: 80.0,
-                          color: Colors.blueAccent,
+                          color: Colors.green,
                         ),
                         SizedBox(height: 8.0),
                         Text(
@@ -172,7 +175,8 @@ class AiPage extends StatelessWidget {
               onPressed: () {
                 // Stop recording and analyze results
                 Navigator.of(context).pop();
-                _analyzeAudio(context); // Show analysis result after recording stops
+                _analyzeAudio(
+                    context); // Show analysis result after recording stops
               },
               child: Text("Stop Recording"),
             ),
@@ -194,8 +198,10 @@ class AiPage extends StatelessWidget {
   void _analyzeAudio(BuildContext context) {
     // Simulate analyzing the audio and generating a percentage of certainty
     final Random random = Random();
-    int certaintyPercentage = random.nextInt(41) + 60; // Generates a number between 60 and 100
-    bool isDrunk = certaintyPercentage >= 80; // Simulate "drunk" if certainty is 80% or more
+    int certaintyPercentage =
+        random.nextInt(41) + 60; // Generates a number between 60 and 100
+    bool isDrunk = certaintyPercentage >=
+        80; // Simulate "drunk" if certainty is 80% or more
 
     String resultMessage = isDrunk
         ? "You might be drunk with $certaintyPercentage% certainty."

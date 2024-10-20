@@ -29,7 +29,8 @@ class _ChatWidgetState extends State<ChatWidget> {
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer sk-KZH5IMALdV2J2KhmBFx_V846ABm5WaEjhepFY2t53zT3BlbkFJ0tAE082wxBTmHGjw0PsxxUrwhT3Ju3CtN-jXF5f-sA', // Use your API key
+        'Authorization':
+            'Bearer sk-KZH5IMALdV2J2KhmBFx_V846ABm5WaEjhepFY2t53zT3BlbkFJ0tAE082wxBTmHGjw0PsxxUrwhT3Ju3CtN-jXF5f-sA', // Use your API key
       },
       body: json.encode({
         'model': 'gpt-4o-mini', // Make sure this is a valid model
@@ -67,7 +68,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _messages
-                      .map((message) => _buildMessageBubble(message))
+                      .map(
+                        (message) => _buildMessageBubble(message),
+                      )
                       .toList(),
                 ),
               ),
