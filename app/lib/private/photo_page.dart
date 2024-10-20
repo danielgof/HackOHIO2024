@@ -72,7 +72,7 @@ class _CameraWidgetState extends State<CameraWidget> {
             userSex +
             " HEADER[Injury Name] DESCRIPTION[brief decription no more then 10 words] IF CONTAINS CONTENTS FROM THIS LIST: " +
             userHealthRisks +
-            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks if they can be effected by injury or if the injury was cause by the them] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] is injury serious? HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time for the user and how much faster the recovery will be if treated properly]";
+            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks if they can be effected by injury or if the injury was cause by the them] HEADER{Treatment:} BULLET POINTS - [steps to take to treat the injury] is injury serious? HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time for the user and how much faster the recovery will be if treated properly]";
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
     var requestBody = {
       "model": "gpt-4o-mini",
