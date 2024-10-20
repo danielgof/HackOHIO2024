@@ -175,76 +175,127 @@ class _CameraWidgetState extends State<CameraWidget> {
   }
 
   Widget _buildCameraPreview() {
-    return FutureBuilder<void>(
-      future: _initializeControllerFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    height: 400,
-                    child: Center(child: CameraPreview(_controller!)),
-                  ),
-                  Positioned(
-                    bottom: 16.0,
-                    right: 16.0,
-                    child: ElevatedButton(
-                      onPressed: _takePicture,
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                      child: Icon(Icons.camera_alt,
-                          size: 100.0, color: Colors.green),
+  return FutureBuilder<void>(
+    future: _initializeControllerFuture,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,  // Center the preview in the column
+          crossAxisAlignment: CrossAxisAlignment.center, // Ensure horizontal centering
+          children: [
+            // Wrapping with Center ensures the preview is centered
+            Center(
+              child: Container(
+                height: 400,
+                width: 300, // You can adjust this for different screen sizes
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10.0,
+                      offset: Offset(0, 5),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        } else {
-          return Center(child: CircularProgressIndicator.adaptive());
-        }
-      },
-    );
-  }
-
-  Widget _buildWaitPage() {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
-    );
-  }
-
-  Widget _buildResponsePage() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            response,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  ],
                 ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setCameraPage();
-            },
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: CameraPreview(_controller!),
+                ),
               ),
             ),
-            child: const Icon(Icons.home, size: 100.0, color: Colors.green),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: _takePicture,
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.green,
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                elevation: 10.0,
+                shadowColor: Colors.greenAccent,
+              ),
+              child: Icon(Icons.camera_alt, size: 50.0, color: Colors.green),
+            ),
+          ],
+        );
+      } else {
+        return Center(child: CircularProgressIndicator.adaptive());
+      }
+    },
+  );
+}
+
+
+
+  Widget _buildWaitPage() {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircularProgressIndicator.adaptive(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+        ),
+        SizedBox(height: 20),
+        Text(
+          'Please wait...',
+          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+        ),
+      ],
+    ),
+  );
+}
+
+
+  Widget _buildResponsePage() {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 8.0,
+                offset: Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+          child: Text(
+            response,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green[700],
+                ),
+          ),
+        ),
+        SizedBox(height: 40),
+        ElevatedButton(
+          onPressed: () {
+            setCameraPage();
+          },
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.green,
+            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            elevation: 10.0,
+            shadowColor: Colors.greenAccent,
+          ),
+          child: Icon(Icons.home, size: 50.0, color: Colors.white),
+        ),
+      ],
+    ),
+  );
+}
+
 }
