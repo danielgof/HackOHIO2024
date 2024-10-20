@@ -3,7 +3,6 @@ import 'package:app/private/profile_page.dart';
 import 'package:app/public/login_page.dart';
 import 'package:app/public/messaging_page.dart';
 import 'package:app/state.dart';
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app/private/ai_page.dart';

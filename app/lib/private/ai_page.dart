@@ -1,3 +1,4 @@
+import 'package:app/private/photo_page.dart';
 import 'package:flutter/material.dart';
 
 class AiPage extends StatelessWidget {
@@ -17,7 +18,12 @@ class AiPage extends StatelessWidget {
                       margin: EdgeInsets.all(16.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Add camera functionality
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CameraWidget(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
