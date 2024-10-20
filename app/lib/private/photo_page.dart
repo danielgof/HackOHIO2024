@@ -12,7 +12,48 @@ class CameraWidget extends StatefulWidget {
 
 class _CameraWidgetState extends State<CameraWidget> {
   File? _image;
+  // late String imagePath;
+  // late String response;
 
+  late CameraController _cameraController;
+  late List<CameraDescription> _cameras;
+  XFile? _pictureFile;
+
+  @override
+  void initState() {
+    super.initState();
+    _initCamera();
+  }
+
+  // Initialize the camera
+  Future<void> _initCamera() async {
+    _cameras = await availableCameras();
+    _cameraController = CameraController(_cameras[0], ResolutionPreset.high);
+    await _cameraController.initialize();
+    setState(() {}); // Rebuild to show the camera preview
+  }
+
+  // Take a picture
+  Future<void> _takePicture() async {
+    if (!_cameraController.value.isInitialized) {
+      return;
+    }
+
+    try {
+      final image = await _cameraController.takePicture();
+      setState(() {
+        _pictureFile = image;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +61,20 @@ class _CameraWidgetState extends State<CameraWidget> {
       appBar: AppBar(
         title: Text('Camera Example'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _cameraController.value.isInitialized
-                ? CameraPreview(_cameraController) // Show the camera preview
-                : Center(child: CircularProgressIndicator()), // Loading state
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text('Take Picture'),
-          ),
-          if (_pictureFile != null)
-            Image.file(File(_pictureFile!.path)) // Display the taken picture
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _image != null
+                ? Image.file(_image!) // Display the image
+                : Text('No image selected.'),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('Take Picture'),
+            ),
+          ],
+        ),
       ),
     );
   }
