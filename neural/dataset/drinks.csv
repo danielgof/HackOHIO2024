@@ -1,0 +1,12 @@
+filename,fold,target,category
+ham-0.wav,1,0,not-drunk
+ham-1.wav,1,1,drunk
+ham-2.wav,1,1,drunk
+ham-3.wav,1,1,drunk
+ham-4.wav,1,1,drunk
+ham-5.wav,1,1,drunk
+james-0.wav,1,0,not-drunk
+james-1.wav,1,0,not-drunk
+will-0.wav,1,0,not-drunk
+will-1.wav,1,1,drunk
+yury-5.wav,1,1,drunk

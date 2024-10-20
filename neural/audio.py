@@ -18,16 +18,16 @@ NUM_CLASSES = 10
 EPOCHS = 200
 SAMPLE_RATE = 16000
 
-pd_data = pd.read_csv(os.path.join(BASE_DATA_DIR, "meta", "drinks.csv"))
+pd_data = pd.read_csv(os.path.join(BASE_DATA_DIR, "drinks.csv"))
 
 def read_wav_file(path, target_sr=SAMPLE_RATE):
-    sr, wav = scipy.io.wavfile.read(os.path.join(BASE_DATA_DIR, "audio", path))
+    sr, wav = scipy.io.wavfile.read(os.path.join(BASE_DATA_DIR, path))
     wav = wav.astype(np.float32) / 32768.0  # normalize to [-1, 1]
     num_samples = int(len(wav) * target_sr / sr)  # resample to 16 kHz
     wav = resample(wav, num_samples)
     return wav[:, None] 
 
-def plot_single_spectrogram(sample_wav_data):
+#def plot_single_spectrogram(sample_wav_data):
     spectrogram = layers.STFTSpectrogram(
         mode="log",
         frame_length=SAMPLE_RATE * 20 // 1000,
@@ -43,7 +43,7 @@ def plot_single_spectrogram(sample_wav_data):
     plt.ylabel("Frequency")
     plt.show()
 
-def plot_multi_bandwidth_spectrogram(sample_wav_data):
+#def plot_multi_bandwidth_spectrogram(sample_wav_data):
     # All spectrograms must use the same `fft_length`, `frame_step`, and
     # `padding="same"` in order to produce spectrograms with identical shapes,
     # hence aligning them together. `expand_dims` ensures that the shapes are
@@ -75,13 +75,13 @@ def plot_multi_bandwidth_spectrogram(sample_wav_data):
     plt.ylabel("Frequency")
     plt.show()
 
-sample_wav_data = read_wav_file(pd_data["filename"].tolist()[52])
+sample_wav_data = read_wav_file(pd_data["filename"].tolist()[10])
 plt.plot(sample_wav_data[:, 0])
 plt.show()
 
-plot_single_spectrogram(sample_wav_data)
+#plot_single_spectrogram(sample_wav_data)
 
-plot_multi_bandwidth_spectrogram(sample_wav_data)
+#plot_multi_bandwidth_spectrogram(sample_wav_data)
 
 def read_dataset(df, folds):
     msk = df["fold"].isin(folds)
