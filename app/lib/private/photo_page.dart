@@ -61,6 +61,18 @@ class _CameraWidgetState extends State<CameraWidget> {
 
   // Send Base64 string to ChatGPT API
   Future<void> _sendToChatGPT(String base64Image) async {
+    String userSex = "";
+    String userName = "";
+    String userAge = "";
+    String userHealthRisks = "";
+    String txt =
+        "DESCRIPTION: you are a helpfull health AI which will analyze injurys from a photo and give advice for the user OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written is there an injury? IF NO RESPOND: {no injurys detected :D stay safe} IF INJURY RESPOND: BULLET POINTS - " +
+            userName +
+            userAge +
+            userSex +
+            " HEADER[Injury Name] DESCRIPTION[brief decription no more then 10 words] IF CONTAINS CONTENTS FROM THIS LIST: " +
+            userHealthRisks +
+            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks from the list] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] is injury serious? IF YES RESPONS: HEADER{THIS IS A SERIOUS INJURY CALL 911 IMIDIETLY} HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time for the user and how much faster the recovery will be if treated properly]";
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
     var requestBody = {
       "model": "gpt-4o-mini",
@@ -68,7 +80,10 @@ class _CameraWidgetState extends State<CameraWidget> {
         {
           "role": "user",
           "content": [
-            {"type": "text", "text": "Some text here"}, // Example
+            {
+              "type": "text",
+              "text": txt,
+            },
             {
               "type": "image_url",
               "image_url": {"url": "data:image/jpeg;base64,$base64Image"}
@@ -92,7 +107,7 @@ class _CameraWidgetState extends State<CameraWidget> {
     );
 
     if (response.statusCode == 200) {
-      setResult(jsonDecode(response.body)['choices'][0]['message']['content']);
+      setResult(json.decode(response.body)['choices'][0]['message']['content']);
       setResponsePage();
     } else {
       print('Error: ${response.statusCode}');
@@ -153,7 +168,7 @@ class _CameraWidgetState extends State<CameraWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('Camera Input')),
+        appBar: AppBar(title: const Text('Camera Input')),
         body: SafeArea(
           child: _buildContent(),
         ),
@@ -174,35 +189,53 @@ class _CameraWidgetState extends State<CameraWidget> {
     }
   }
 
+
   Widget _buildCameraPreview() {
     return FutureBuilder<void>(
       future: _initializeControllerFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Column(
+            mainAxisAlignment:
+                MainAxisAlignment.center, // Center the preview in the column
+            crossAxisAlignment:
+                CrossAxisAlignment.center, // Ensure horizontal centering
             children: [
-              Stack(
-                children: [
-                  Container(
-                    height: 400,
-                    child: Center(child: CameraPreview(_controller!)),
-                  ),
-                  Positioned(
-                    bottom: 16.0,
-                    right: 16.0,
-                    child: ElevatedButton(
-                      onPressed: _takePicture,
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+              // Wrapping with Center ensures the preview is centered
+              Center(
+                child: Container(
+                  height: 400,
+                  width: 300, // You can adjust this for different screen sizes
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10.0,
+                        offset: Offset(0, 5),
                       ),
-                      child: Icon(Icons.camera_alt,
-                          size: 100.0, color: Colors.green),
-                    ),
+                    ],
                   ),
-                ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16.0),
+                    child: CameraPreview(_controller!),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: _takePicture,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.green,
+                  padding:
+                      EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  elevation: 10.0,
+                  shadowColor: Colors.greenAccent,
+                ),
+                child: Icon(Icons.camera_alt, size: 50.0, color: Colors.green),
               ),
             ],
           );
@@ -214,36 +247,71 @@ class _CameraWidgetState extends State<CameraWidget> {
   }
 
   Widget _buildWaitPage() {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator.adaptive(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Please wait...',
+            style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildResponsePage() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            response,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setCameraPage();
-            },
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8.0,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Text(
+                response,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green[700],
+                    ),
               ),
             ),
-            child: const Icon(Icons.home, size: 100.0, color: Colors.green),
-          ),
-        ],
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                setCameraPage();
+              },
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                elevation: 10.0,
+                shadowColor: Colors.greenAccent,
+              ),
+              child: const Icon(Icons.home, size: 50.0, color: Colors.green),
+            ),
+          ],
+        ),
       ),
     );
   }

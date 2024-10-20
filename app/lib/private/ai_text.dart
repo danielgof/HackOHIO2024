@@ -54,7 +54,7 @@ class _ChatWidgetState extends State<ChatWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('ChatGPT Messenger')),
+      appBar: AppBar(title: const Text('Ask Advice')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -74,7 +74,7 @@ class _ChatWidgetState extends State<ChatWidget> {
               decoration: InputDecoration(
                 labelText: 'Type your message',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     final message = _controller.text.trim();
                     if (message.isNotEmpty) {
