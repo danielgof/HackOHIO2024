@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class ChatWidget extends StatefulWidget {
   @override
   _ChatWidgetState createState() => _ChatWidgetState();
@@ -18,9 +17,13 @@ class _ChatWidgetState extends State<ChatWidget> {
     setState(() {
       _messages.add(Message(content: message, isUser: true));
     });
+    String userSex = "Male";
+    String userName = "Brutus Buckeye";
+    String userAge = "25";
+    String userHealthRisks = "Allregies";
 
     final formattedMessage =
-        'As a medical professional, please respond to the following inquiry: $message';
+        'The users name is $userName, age: $userAge, sex: $userSex, and they have these health risks: $userHealthRisks, as a medical professional, please respond to the following inquiry: $message';
 
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
