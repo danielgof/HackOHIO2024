@@ -31,11 +31,12 @@ class AiPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
+                          backgroundColor: Colors.white,
                         ),
                         child: Center(
                           child: Icon(Icons.camera_alt, // Camera icon
                               size: 100.0,
-                              color: Colors.green),
+                              color: Colors.blue),
                         ),
                       ),
                     ),
@@ -58,13 +59,18 @@ class AiPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
                           ),
+                          backgroundColor: Colors.white,
+                          elevation: 2.0, // Optional: You can adjust elevation as needed
                         ),
                         child: Center(
-                          child: Icon(Icons.message, // chat icon
-                              size: 100.0,
-                              color: Colors.green),
+                          child: Icon(
+                            Icons.message, // chat icon
+                            size: 100.0,
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
+
                     ),
                   ),
                 ],

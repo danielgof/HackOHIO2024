@@ -13,7 +13,7 @@ from scipy.signal import resample
 
 keras.utils.set_random_seed(41)
 
-BASE_DATA_DIR = "./neural/dataset/"
+BASE_DATA_DIR = "./dataset/"
 BATCH_SIZE = 16
 NUM_CLASSES = 10
 EPOCHS = 200
@@ -105,7 +105,7 @@ train_x, train_y = read_dataset(pd_data, [1, 2, 3])
 valid_x, valid_y = read_dataset(pd_data, [4])
 test_x, test_y = read_dataset(pd_data, [5])
 
-'''
+
 model1d = keras.Sequential(
     [
         layers.InputLayer((None, 1)),
@@ -132,18 +132,14 @@ model1d = keras.Sequential(
     ],
     name="model_1d_non_trainble_stft",
 )
-'''
-'''
 model1d.compile(
     optimizer=keras.optimizers.Adam(1e-5),
     loss="sparse_categorical_crossentropy",
     metrics=["accuracy"],
 )
-'''
 
-#model1d.summary()
+model1d.summary()
 
-'''
 history_model1d = model1d.fit(
     train_x,
     train_y,
@@ -158,7 +154,6 @@ history_model1d = model1d.fit(
         )
     ],
 )
-'''
 
 input = layers.Input((None, 1))
 spectrograms = [
@@ -183,29 +178,6 @@ output = layers.Dropout(0.5)(output)
 output = layers.Dense(256, activation="relu")(output)
 output = layers.Dense(256, activation="relu")(output)
 output = layers.Dense(NUM_CLASSES, activation="softmax")(output)
-model2d = keras.Model(input, output, name="model_2d_trainble_stft")
-
-model2d.compile(
-    optimizer=keras.optimizers.Adam(1e-4),
-    loss="sparse_categorical_crossentropy",
-    metrics=["accuracy"],
-)
-model2d.summary()
-
-history_model2d = model2d.fit(
-    train_x,
-    train_y,
-    batch_size=BATCH_SIZE,
-    validation_data=(valid_x, valid_y),
-    epochs=EPOCHS,
-    callbacks=[
-        keras.callbacks.EarlyStopping(
-            monitor="val_loss",
-            patience=EPOCHS,
-            restore_best_weights=True,
-        )
-    ],
-)
 
 epochs_range = range(EPOCHS)
 
@@ -214,22 +186,12 @@ plt.subplot(1, 2, 1)
 plt.plot(
     epochs_range,
     history_model1d.history["accuracy"],
-    label="Training Accuracy,1D model with non-trainable STFT",
+    label="Training Accuracy,1D model with STFT",
 )
 plt.plot(
     epochs_range,
     history_model1d.history["val_accuracy"],
-    label="Validation Accuracy, 1D model with non-trainable STFT",
-)
-plt.plot(
-    epochs_range,
-    history_model2d.history["accuracy"],
-    label="Training Accuracy, 2D model with trainable STFT",
-)
-plt.plot(
-    epochs_range,
-    history_model2d.history["val_accuracy"],
-    label="Validation Accuracy, 2D model with trainable STFT",
+    label="Validation Accuracy, 1D model with STFT",
 )
 plt.legend(loc="lower right")
 plt.title("Training and Validation Accuracy")
@@ -238,32 +200,18 @@ plt.subplot(1, 2, 2)
 plt.plot(
     epochs_range,
     history_model1d.history["loss"],
-    label="Training Loss,1D model with non-trainable STFT",
+    label="Training Loss,1D model with STFT",
 )
 plt.plot(
     epochs_range,
     history_model1d.history["val_loss"],
-    label="Validation Loss, 1D model with non-trainable STFT",
-)
-plt.plot(
-    epochs_range,
-    history_model2d.history["loss"],
-    label="Training Loss, 2D model with trainable STFT",
-)
-plt.plot(
-    epochs_range,
-    history_model2d.history["val_loss"],
-    label="Validation Loss, 2D model with trainable STFT",
+    label="Validation Loss, 1D model with STFT",
 )
 plt.legend(loc="upper right")
 plt.title("Training and Validation Loss")
 plt.show()
 
-#_, test_acc = model1d.evaluate(test_x, test_y)
-#print(f"1D model wit non-trainable STFT -> Test Accuracy: {test_acc * 100:.2f}%")
-
-_, test_acc = model2d.evaluate(test_x, test_y)
-print(f"2D model with trainable STFT -> Test Accuracy: {test_acc * 100:.2f}%")
-
+_, test_acc = model1d.evaluate(test_x, test_y)
+print(f"1D model wit STFT -> Test Accuracy: {test_acc * 100:.2f}%")
 
 

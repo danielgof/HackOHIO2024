@@ -16,6 +16,7 @@ late TextEditingController _numberController;
 late TextEditingController _addressController;
 late TextEditingController _phoneController;
 late TextEditingController _emailController;
+late TextEditingController _ageController;
 String _sexOption = 'Male';
 
 class ProfilePageState extends State<ProfilePage> {
@@ -41,6 +42,7 @@ class ProfilePageState extends State<ProfilePage> {
     _phoneController = TextEditingController(text: '1234567890');
     _emailController =
         TextEditingController(text: 'buckeye.1@buckeyemail.osu.edu');
+    _ageController = TextEditingController(text: '25');
     _checkedItems = List.generate(_healthItems.length, (index) => false);
     _checkedItems[4] = true;
   }
@@ -49,6 +51,11 @@ class ProfilePageState extends State<ProfilePage> {
   void dispose() {
     _searchController.dispose();
     _fullNameController.dispose();
+    _numberController.dispose();
+    _addressController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    _ageController.dispose();
     super.dispose();
   }
 
@@ -114,7 +121,9 @@ class ProfilePageState extends State<ProfilePage> {
                               Text(
                                 'My Info:',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -161,6 +170,18 @@ class ProfilePageState extends State<ProfilePage> {
                               ),
                               SizedBox(height: 10),
                               TextFormField(
+                                controller: _ageController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: 'Age',
+                                  border: OutlineInputBorder(),
+                                ),
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              TextFormField(
                                 controller: _numberController,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
@@ -203,7 +224,8 @@ class ProfilePageState extends State<ProfilePage> {
                               Text(
                                 'My Health:',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 10),
                               ListView.builder(
@@ -227,9 +249,8 @@ class ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    // Add the Visibility widget to hide this section based on _isVisible
                     Visibility(
-                      visible: _isVisible, // Only show this section when _isVisible is false
+                      visible: _isVisible,
                       child: Column(
                         children: [
                           SizedBox(height: 20),
@@ -262,7 +283,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.green,
+                                    color: Colors.black,
                                   ),
                                 ),
                                 SizedBox(height: 10),
@@ -276,6 +297,8 @@ class ProfilePageState extends State<ProfilePage> {
                                         _buildProfileDetail(
                                             'Name:', _fullNameController.text),
                                         _buildProfileDetail('Sex:', _sexOption),
+                                        _buildProfileDetail(
+                                            'Age:', _ageController.text),
                                         _buildProfileDetail(
                                             'Email:', _emailController.text),
                                         _buildProfileDetail(
