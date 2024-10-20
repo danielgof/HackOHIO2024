@@ -10,15 +10,17 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => ProfilePageState();
 }
 
+late TextEditingController _searchController;
+late TextEditingController _fullNameController;
+late TextEditingController _numberController;
+late TextEditingController _addressController;
+late TextEditingController _phoneController;
+late TextEditingController _emailController;
+String _sexOption = 'Male';
+
 class ProfilePageState extends State<ProfilePage> {
-  late TextEditingController _searchController;
-  late TextEditingController _fullNameController;
-  late TextEditingController _numberController;
-  late TextEditingController _addressController;
-  late TextEditingController _phoneController;
-  late TextEditingController _emailController;
   bool _isVisible = true;
-  String _sexOption = 'Male';
+  
 
   List<String> _healthItems = [
     'Diabetes',
