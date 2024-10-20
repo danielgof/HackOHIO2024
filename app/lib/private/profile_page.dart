@@ -1,5 +1,6 @@
 import 'package:app/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -11,60 +12,51 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   late TextEditingController _searchController;
-  List<String> _list = [
-    'Milk',
-    'Eggs',
-    'Fish (e.g., bass, flounder, cod)',
-    'Crustacean shellfish (e.g., crab, lobster, shrimp)',
-    'Tree Nuts (e.g., almonds, walnuts, pecans)',
-    'Peanuts',
-    'Wheat',
-    'Soybeans',
-    'Sesame seeds',
-    'Mustard',
-    'Sulfites',
-    'Celery',
-    'Lupin',
-    'Mollusks (e.g., clams, mussels, oysters)',
-    'Gluten-containing grains (e.g., barley, rye)',
+  late TextEditingController
+      _fullNameController; // New controller for full name input
+  late TextEditingController _numberController;
+  late TextEditingController _addressController;
+  late TextEditingController _phoneController;
+  late TextEditingController _emailController;
+  bool _isVisible = true;
+  String _sexOption = 'Male';
+  var appState;
+
+  // List of health items for checkboxes
+  List<String> _healthItems = [
+    'Diabetes',
+    'High Blood Pressure',
+    'Heart Disease',
+    'Asthma',
+    'Allergies',
   ];
 
-  late List<String> _searchList;
-  late List<bool> _checkedList;
-  bool _isVisible = false;
-  var appState;
+  // List to track which items are checked
+  late List<bool> _checkedItems;
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
-    _searchList = _list;
-    _checkedList = List.generate(_list.length, (index) => false);
+    _fullNameController = TextEditingController(
+        text: 'Brutus Buckeye'); // Initialize the controller
+    _numberController = TextEditingController(text: '135');
+    _addressController = TextEditingController(text: '100 Norwich Ave');
+    _phoneController = TextEditingController(text: '1234567890');
+    _emailController =
+        TextEditingController(text: 'buckeye.1@buckeyemail.osu.edu');
+
+    // Initialize all health items to unchecked (false)
+    _checkedItems = List.generate(_healthItems.length, (index) => false);
+    _checkedItems[4] = true;
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _fullNameController.dispose(); // Dispose the full name controller
     appState = context.watch<MyAppState>();
-    setState(() {
-      appState.toggelPreference(_searchList);
-    });
     super.dispose();
-  }
-
-  void _filterList(String searchText) {
-    searchText = searchText.toLowerCase();
-    setState(() {
-      _searchList = _list
-          .where((item) => item.toLowerCase().contains(searchText))
-          .toList();
-    });
-  }
-
-  void _toggleCheckbox(int index) {
-    setState(() {
-      _checkedList[index] = !_checkedList[index];
-    });
   }
 
   void _toggleEditPreferences(bool isVisible) {
@@ -82,113 +74,168 @@ class ProfilePageState extends State<ProfilePage> {
         body: CustomScrollView(
           slivers: <Widget>[
             SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'My Account',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  ClipOval(
-                    child: Image.asset(
-                      'assets/IMG_7421.png', // Assuming the image is stored in the assets folder
-                      width: 80, // Adjust the width as needed
-                      height: 80, // Adjust the height as needed
+              child: Padding(
+                padding: EdgeInsetsDirectional.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'My Account',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Welcome, brutus_buckeye!',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 20),
-                  Visibility(
-                    visible: !_isVisible,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'My Allergies:',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 100, // Set the desired fixed height
-                          child: ListView.builder(
-                            itemCount: _list.length,
-                            itemBuilder: (context, index) {
-                              if (_checkedList[index]) {
-                                return ListTile(
-                                  title: Text(_list[index]),
-                                );
-                              } else {
-                                return SizedBox
-                                    .shrink(); // Hide if preference is not true
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _toggleEditPreferences(_isVisible);
-                          },
-                          child: Column(
-                            children: [Text('Edit Preferences')],
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            appState.logout();
-                          },
-                          child: Row(
-                            children: [
-                              Text('Logout'),
-                              Icon(Icons.arrow_forward),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Visibility(
-                    visible: _isVisible,
-                    child: SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                        itemCount: _searchList.length,
-                        itemBuilder: (context, index) {
-                          return CheckboxListTile(
-                            title: Text(_searchList[index]),
-                            value: _checkedList[index],
-                            onChanged: (bool? value) {
-                              _toggleCheckbox(index);
-                              // if (_checkedList[index]) {
-                              //   // appState.toggelPreference(_searchList[index]);
-                              //   // setState(() {
-                              //   //   appState.toggelPreference(_searchList[index]);
-                              //   // });
-                              // }
-                            },
-                          );
-                        },
+                    SizedBox(height: 10),
+                    ClipOval(
+                      child: Image.asset(
+                        'assets/IMG_7421.png', // Assuming the image is stored in the assets folder
+                        width: 80, // Adjust the width as needed
+                        height: 80, // Adjust the height as needed
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 10),
+                    Text(
+                      'Welcome, brutus_buckeye!',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 20),
+                    Visibility(
+                      visible: !_isVisible,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'My Info:',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 20),
+                          TextFormField(
+                            controller: _fullNameController,
+                            decoration: InputDecoration(
+                              labelText: 'Full Name',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          ListTile(
+                            title: const Text('Male'),
+                            leading: Radio<String>(
+                              value: 'Male',
+                              groupValue: _sexOption,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _sexOption = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          ListTile(
+                            title: const Text('Female'),
+                            leading: Radio<String>(
+                              value: 'Female',
+                              groupValue: _sexOption,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _sexOption = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            controller: _numberController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: 'Weight (LBS)',
+                              border: OutlineInputBorder(),
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            controller: _addressController,
+                            decoration: InputDecoration(
+                              labelText: 'Address',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            controller: _phoneController,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Phone Number',
+                              border: OutlineInputBorder(),
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: const InputDecoration(
+                              labelText: 'Email',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'My Health:',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _healthItems.length,
+                            itemBuilder: (context, index) {
+                              return CheckboxListTile(
+                                title: Text(_healthItems[index]),
+                                value: _checkedItems[index],
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _checkedItems[index] = value!;
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              _toggleEditPreferences(_isVisible);
+                            },
+                            child: Column(
+                              children: [Text('Edit Information')],
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              appState.logout();
+                            },
+                            child: Row(
+                              children: [
+                                Text('Logout'),
+                                Icon(Icons.arrow_forward),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
