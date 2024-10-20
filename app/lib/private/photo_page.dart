@@ -254,49 +254,25 @@ class _CameraWidgetState extends State<CameraWidget> {
 
   Widget _buildResponsePage() {
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.0),
-              padding: EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8.0,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Text(
-                response,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[700],
-                    ),
-              ),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                setCameraPage();
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.green,
-                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            response,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-                elevation: 10.0,
-                shadowColor: Colors.greenAccent,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setCameraPage();
+            },
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              child: const Icon(Icons.home, size: 50.0, color: Colors.green),
             ),
             child: const Icon(Icons.home, size: 100.0, color: Colors.green),
           ),
