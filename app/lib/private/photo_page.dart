@@ -247,20 +247,8 @@ class _CameraWidgetState extends State<CameraWidget> {
   }
 
   Widget _buildWaitPage() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator.adaptive(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-          ),
-          SizedBox(height: 20),
-          Text(
-            'Please wait...',
-            style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-          ),
-        ],
-      ),
+    return const Center(
+      child: CircularProgressIndicator.adaptive(),
     );
   }
 
@@ -310,8 +298,9 @@ class _CameraWidgetState extends State<CameraWidget> {
               ),
               child: const Icon(Icons.home, size: 50.0, color: Colors.green),
             ),
-          ],
-        ),
+            child: const Icon(Icons.home, size: 100.0, color: Colors.green),
+          ),
+        ],
       ),
     );
   }
