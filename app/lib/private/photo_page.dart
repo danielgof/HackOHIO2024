@@ -1,169 +1,8 @@
-// import 'dart:convert';
-// import 'package:camera/camera.dart';
-// import 'package:app/state.dart';
-// import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:io';
-
-// class CameraWidget extends StatefulWidget {
-//   @override
-//   _CameraWidgetState createState() => _CameraWidgetState();
-// }
-
-// class _CameraWidgetState extends State<CameraWidget> {
-//   File? _image;
-//   late String imagePath;
-//   late String response;
-
-//   late CameraController _cameraController;
-//   late List<CameraDescription> _cameras;
-//   XFile? _pictureFile;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _initCamera();
-//   }
-
-//   // Initialize the camera
-//   Future<void> _initCamera() async {
-//     _cameras = await availableCameras();
-//     _cameraController = CameraController(_cameras[0], ResolutionPreset.high);
-//     await _cameraController.initialize();
-//     setState(() {}); // Rebuild to show the camera preview
-//   }
-
-//   Future<void> _sendFileToServer(MyAppState state) async {
-//     File imageFile = File(imagePath);
-//     List<int> imageData = await imageFile.readAsBytes();
-//     // Convert bytes to base64
-//     String base64Image = base64Encode(imageData);
-//     String result = state.preferences.toString();
-//     // print(result);
-//     // print(base64Image);
-
-//     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
-//     var requestBody = {
-//       "model": "gpt-4-vision-preview",
-//       "messages": [
-//         {
-//           "role": "user",
-//           "content": [
-//             {
-//               "type": "text",
-//               "text": "OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written"
-//                       "Is it food? IF NO RESPOND: {DO NOT EAT THAT [OBJECT]}" +
-//                   "IF FOOD RESPOND:" +
-//                   "HEADER[Food Name]" +
-//                   "DESCRIPTION[brief decription no more then 10 words]" +
-//                   "IF CONTAINS CONTENTS FROM THIS LIST: " +
-//                   result +
-//                   " HEADER{Your Allergens Detected:} + BULLET POINTS - [bullet points of allergens from the list]"
-//                       "HEADER{Other Potential Allergens:}" +
-//                   "BULLET POINTS - [bullet point specific food items or contents it is made out of that may cause allergies]" +
-//                   "HEADER{Estimated Caloric Content:}" +
-//                   "BULLET POINTS[Number of same food items if countable and estimated calloriesfor each]" +
-//                   "HEADER{Total Calories:}" +
-//                   "BULLET POINT[Estimate total calories of the all the foods]" +
-//                   "DESCRIPTION[Potential health beneifts and risks of the foods no more then 50 words]"
-//             },
-//             {
-//               "type": "image_url",
-//               "image_url": {"url": "data:image/jpeg;base64,$base64Image"}
-//             }
-//           ]
-//         }
-//       ],
-//       "max_tokens": 300
-//     };
-
-//     var headers = {
-//       'Content-Type': 'application/json',
-//       'Authorization':
-//           'Bearer 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',
-//     };
-
-//     var response = await http.post(
-//       url,
-//       headers: headers,
-//       body: jsonEncode(requestBody),
-//     );
-
-//     print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-//     if (response.statusCode == 200) {
-//       setResult(jsonDecode(response.body)['choices'][0]['message']['content']);
-//       print(
-//           'Response body: ${jsonDecode(response.body)['choices'][0]['message']['content']}');
-//       setResponsePage();
-//     } else {
-//       print('Request failed with status: ${response.statusCode}');
-//       print(response.body);
-//     }
-//   }
-
-//   void setResponsePage() {
-//     setState(() {
-//       // state = PageType.ResponsePage;
-//     });
-//   }
-
-//   void setResult(String res) {
-//     setState(() {
-//       // response = res;
-//     });
-//   }
-
-//   // Take a picture
-//   Future<void> _takePicture() async {
-//     if (!_cameraController.value.isInitialized) {
-//       return;
-//     }
-
-//     try {
-//       final image = await _cameraController.takePicture();
-//       setState(() {
-//         _pictureFile = image;
-//       });
-//     } catch (e) {
-//       print('Error: $e');
-//     }
-//   }
-
-//   @override
-//   void dispose() {
-//     _cameraController.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Camera Example'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             _image != null
-//                 ? Image.file(_image!) // Display the image
-//                 : Text('No image selected.'),
-//             SizedBox(height: 20),
-//             ElevatedButton(
-//               onPressed: () {},
-//               child: Text('Take Picture'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-import 'dart:io';
-
+import 'dart:convert';  // For Base64 encoding
+import 'dart:io';       // For File I/O
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http; // To make the HTTP request
 
 class CameraWidget extends StatefulWidget {
   @override
@@ -202,6 +41,35 @@ class _CameraWidgetState extends State<CameraWidget> {
     super.dispose();
   }
 
+  // Convert image to Base64 string
+  Future<String> _convertImageToBase64(XFile image) async {
+    final bytes = await File(image.path).readAsBytes(); // Read file as bytes
+    return base64Encode(bytes); // Convert to Base64 string
+  }
+
+  // Send Base64 string to ChatGPT API
+  Future<void> _sendToChatGPT(String base64Image) async {
+    final response = await http.post(
+      Uri.parse('https://api.openai.com/v1/chat/completions'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer YOUR_API_KEY', // Replace with your API key
+      },
+      body: jsonEncode({
+        'model': 'gpt-4o-mini',
+        'messages': [
+          {'role': 'user', 'content': 'This is an image in Base64: $base64Image'},
+        ],
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('ChatGPT Response: ${response.body}');
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }
+
   Future<void> _takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) {
       return;
@@ -213,6 +81,10 @@ class _CameraWidgetState extends State<CameraWidget> {
       setState(() {
         imageFile = image;
       });
+
+      // Convert image to Base64 and send to ChatGPT
+      final base64Image = await _convertImageToBase64(image);
+      await _sendToChatGPT(base64Image);
     } catch (e) {
       print('Error taking picture: $e');
     }
