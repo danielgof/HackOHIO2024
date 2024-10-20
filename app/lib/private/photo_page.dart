@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'package:camera/camera.dart';
+import 'package:app/state.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'dart:io';
 
 class CameraWidget extends StatefulWidget {
@@ -9,16 +12,47 @@ class CameraWidget extends StatefulWidget {
 
 class _CameraWidgetState extends State<CameraWidget> {
   File? _image;
+  // late String imagePath;
+  // late String response;
 
+  late CameraController _cameraController;
+  late List<CameraDescription> _cameras;
+  XFile? _pictureFile;
+
+  @override
+  void initState() {
+    super.initState();
+    _initCamera();
+  }
+
+  // Initialize the camera
+  Future<void> _initCamera() async {
+    _cameras = await availableCameras();
+    _cameraController = CameraController(_cameras[0], ResolutionPreset.high);
+    await _cameraController.initialize();
+    setState(() {}); // Rebuild to show the camera preview
+  }
+
+  // Take a picture
   Future<void> _takePicture() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+    if (!_cameraController.value.isInitialized) {
+      return;
     }
+
+    try {
+      final image = await _cameraController.takePicture();
+      setState(() {
+        _pictureFile = image;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,7 +70,7 @@ class _CameraWidgetState extends State<CameraWidget> {
                 : Text('No image selected.'),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _takePicture,
+              onPressed: () {},
               child: Text('Take Picture'),
             ),
           ],
