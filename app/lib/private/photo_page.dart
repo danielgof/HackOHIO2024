@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'dart:io';
 
 class CameraWidget extends StatefulWidget {
@@ -9,17 +9,6 @@ class CameraWidget extends StatefulWidget {
 
 class _CameraWidgetState extends State<CameraWidget> {
   File? _image;
-
-  Future<void> _takePicture() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +25,7 @@ class _CameraWidgetState extends State<CameraWidget> {
                 : Text('No image selected.'),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _takePicture,
+              onPressed: () {},
               child: Text('Take Picture'),
             ),
           ],
