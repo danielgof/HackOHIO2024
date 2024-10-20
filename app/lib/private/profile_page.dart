@@ -76,7 +76,7 @@ class ProfilePageState extends State<ProfilePage> {
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Colors.green),
+                          color: Colors.black),
                     ),
                     SizedBox(height: 20),
                     ClipOval(
@@ -86,11 +86,7 @@ class ProfilePageState extends State<ProfilePage> {
                         height: 80,
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Welcome, brutus_buckeye!',
-                      style: TextStyle(fontSize: 16),
-                    ),
+
                     SizedBox(height: 20),
                     Visibility(
                       visible: !_isVisible,
