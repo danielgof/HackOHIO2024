@@ -5,8 +5,9 @@ class MessagingPagePublic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
+    return Scaffold(
+      backgroundColor: const Color(0xFFdfe4d7),  // Set background color to green
+      body: const SafeArea(
         child: Center(
           child: Text(
             'Please, log in to see your messages',

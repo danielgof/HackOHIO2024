@@ -79,7 +79,7 @@ class ProfilePageState extends State<ProfilePage> {
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Colors.green),
+                          color: Colors.black),
                     ),
                     SizedBox(height: 20),
                     ClipOval(
@@ -89,11 +89,7 @@ class ProfilePageState extends State<ProfilePage> {
                         height: 80,
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Welcome, brutus_buckeye!',
-                      style: TextStyle(fontSize: 16),
-                    ),
+
                     SizedBox(height: 20),
                     Visibility(
                       visible: !_isVisible,
@@ -233,60 +229,64 @@ class ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Center(
+                    // Add the Visibility widget to hide this section based on _isVisible
+                    Visibility(
+                      visible: _isVisible, // Only show this section when _isVisible is false
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  _toggleEditPreferences(_isVisible);
-                                },
-                                icon: Icon(Icons.edit),
-                                label: Text('Edit Information'),
-                              ),
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  appState.logout();
-                                },
-                                icon: Icon(Icons.logout),
-                                label: Text('Logout'),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                              height:
-                                  20), // Increased space between buttons and text
-                          Text(
-                            'My Profile:',
-                            style: TextStyle(
-                              fontSize: 24, // Larger font size for emphasis
-                              fontWeight: FontWeight.bold,
-                              color:
-                                  Colors.green, // Changed color for visibility
-                            ),
-                          ),
-                          SizedBox(height: 10), // Spacing
-                          Card(
-                            elevation: 3, // Add slight elevation
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                  16.0), // Padding inside the card
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _buildProfileDetail(
-                                      'Name:', _fullNameController.text),
-                                  _buildProfileDetail('Sex:', _sexOption),
-                                  _buildProfileDetail(
-                                      'Email:', _emailController.text),
-                                  _buildProfileDetail(
-                                      'Phone:', _phoneController.text),
-                                ],
-                              ),
+                          SizedBox(height: 20),
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        _toggleEditPreferences(_isVisible);
+                                      },
+                                      icon: Icon(Icons.edit),
+                                      label: Text('Edit Information'),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        appState.logout();
+                                      },
+                                      icon: Icon(Icons.logout),
+                                      label: Text('Logout'),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                Text(
+                                  'My Profile:',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Card(
+                                  elevation: 3,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        _buildProfileDetail(
+                                            'Name:', _fullNameController.text),
+                                        _buildProfileDetail('Sex:', _sexOption),
+                                        _buildProfileDetail(
+                                            'Email:', _emailController.text),
+                                        _buildProfileDetail(
+                                            'Phone:', _phoneController.text),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
