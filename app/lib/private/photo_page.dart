@@ -113,7 +113,6 @@ class _CameraWidgetState extends State<CameraWidget> {
     });
   }
 
-
   // Take a picture
   Future<void> _takePicture() async {
     if (!_cameraController.value.isInitialized) {
