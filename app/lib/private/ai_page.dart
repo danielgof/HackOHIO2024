@@ -7,6 +7,7 @@ class AiPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(title: Text('Camera Input Page')),
         body: Column(
           children: [
