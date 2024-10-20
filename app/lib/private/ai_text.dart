@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ChatWidget(),
-    );
-  }
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: ChatWidget(),
+//     );
+//   }
+// }
+
+enum PageType {
+  CameraPage,
+  PicutrePage,
+  WaitPage,
+  ResponsePage;
 }
 
 class ChatWidget extends StatefulWidget {

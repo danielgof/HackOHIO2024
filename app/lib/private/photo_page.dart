@@ -49,14 +49,17 @@ class _CameraWidgetState extends State<CameraWidget> {
 
   // Send Base64 string to ChatGPT API
   Future<void> _sendToChatGPT(String base64Image) async {
+    // print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    // print(base64Image);
+    // print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_KEY', // Replace with your API key
+        'Authorization': 'Bearer ',
       },
-      body: jsonEncode({
-        'model': 'gpt-4o-mini',
+      body: json.encode({
+        'model': 'gpt-4o',
         'messages': [
           {'role': 'user', 'content': 'This is an image in Base64: $base64Image'},
         ],
@@ -67,6 +70,7 @@ class _CameraWidgetState extends State<CameraWidget> {
       print('ChatGPT Response: ${response.body}');
     } else {
       print('Error: ${response.statusCode}');
+      print(response.body);
     }
   }
 
@@ -99,10 +103,13 @@ class _CameraWidgetState extends State<CameraWidget> {
       body: Column(
         children: [
           Center(
-            child: Expanded(
-              child: _controller != null && _controller!.value.isInitialized
-                  ? CameraPreview(_controller!)
-                  : const Center(child: CircularProgressIndicator()),
+            child: SizedBox(
+              height: 400.0,
+              child: Expanded(
+                child: _controller != null && _controller!.value.isInitialized
+                    ? CameraPreview(_controller!)
+                    : const Center(child: CircularProgressIndicator()),
+              ),
             ),
           ),
           if (imageFile != null)
