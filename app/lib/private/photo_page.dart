@@ -49,6 +49,19 @@ class _CameraWidgetState extends State<CameraWidget> {
 
   // Send Base64 string to ChatGPT API
   Future<void> _sendToChatGPT(String base64Image) async {
+    String userSex = "";
+    String userName = "";
+    String userAge = "";
+    String userHealthRisks = "";
+
+    String txt =
+        "DESCRIPTION: you are a helpfull health AI which will analyze injurys from a photo and give advice for the user OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written is there an injury? IF NO RESPOND: {no injurys detected :D stay safe} IF INJURY RESPOND: BULLET POINTS - " +
+            userName +
+            userAge +
+            userSex +
+            " HEADER[Injury Name] DESCRIPTION[brief decription no more then 10 words] IF CONTAINS CONTENTS FROM THIS LIST: " +
+            userHealthRisks +
+            " HEADER{Your Health Risks Detected:} + BULLET POINTS - [bullet points of health risks from the list] HEADER{Other Health Risks if not treated:} BULLET POINTS - [steps to take to treat the injury] is injury serious? IF YES RESPONS: HEADER{THIS IS A SERIOUS INJURY CALL 911 IMIDIETLY} HEADER{Estimated recovery time:} BULLET POINTS[Estimated recovery time for the user and how much faster the recovery will be if treated properly]";
     var url = Uri.parse('https://api.openai.com/v1/chat/completions');
     var requestBody = {
       "model": "gpt-4-vision-preview",
@@ -58,21 +71,7 @@ class _CameraWidgetState extends State<CameraWidget> {
           "content": [
             {
               "type": "text",
-              "text": "OUTPUT PARAMETERS: HEADER - bolded, DESCRIPTION - italic, BRACKETS - description of what to write, CURLY BRACKETS - as written"
-                      "Is it food? IF NO RESPOND: {DO NOT EAT THAT [OBJECT]}" +
-                  "IF FOOD RESPOND:" +
-                  "HEADER[Food Name]" +
-                  "DESCRIPTION[brief decription no more then 10 words]" +
-                  "IF CONTAINS CONTENTS FROM THIS LIST: " +
-                  result +
-                  " HEADER{Your Allergens Detected:} + BULLET POINTS - [bullet points of allergens from the list]"
-                      "HEADER{Other Potential Allergens:}" +
-                  "BULLET POINTS - [bullet point specific food items or contents it is made out of that may cause allergies]" +
-                  "HEADER{Estimated Caloric Content:}" +
-                  "BULLET POINTS[Number of same food items if countable and estimated calloriesfor each]" +
-                  "HEADER{Total Calories:}" +
-                  "BULLET POINT[Estimate total calories of the all the foods]" +
-                  "DESCRIPTION[Potential health beneifts and risks of the foods no more then 50 words]"
+              "text": txt,
             },
             {
               "type": "image_url",
