@@ -20,7 +20,6 @@ String _sexOption = 'Male';
 
 class ProfilePageState extends State<ProfilePage> {
   bool _isVisible = true;
-  
 
   List<String> _healthItems = [
     'Diabetes',
@@ -34,6 +33,7 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
+    var appState = context.watch<MyAppState>();
     super.initState();
     _searchController = TextEditingController();
     _fullNameController = TextEditingController(text: 'Brutus Buckeye');
@@ -44,6 +44,7 @@ class ProfilePageState extends State<ProfilePage> {
         TextEditingController(text: 'buckeye.1@buckeyemail.osu.edu');
     _checkedItems = List.generate(_healthItems.length, (index) => false);
     _checkedItems[4] = true;
+    appState.setUserAge(_numberController as String);
   }
 
   @override

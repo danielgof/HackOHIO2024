@@ -97,7 +97,7 @@ class _CameraWidgetState extends State<CameraWidget> {
     var headers = {
       'Content-Type': 'application/json',
       'Authorization':
-          'Bearer ',
+          'Bearer sk-KZH5IMALdV2J2KhmBFx_V846ABm5WaEjhepFY2t53zT3BlbkFJ0tAE082wxBTmHGjw0PsxxUrwhT3Ju3CtN-jXF5f-sA',
     };
 
     var response = await http.post(
@@ -188,7 +188,6 @@ class _CameraWidgetState extends State<CameraWidget> {
         return Container();
     }
   }
-
 
   Widget _buildCameraPreview() {
     return FutureBuilder<void>(
