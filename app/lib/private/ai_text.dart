@@ -19,6 +19,8 @@ class ChatWidget extends StatefulWidget {
 class _ChatWidgetState extends State<ChatWidget> {
   final TextEditingController _controller = TextEditingController();
   final List<Message> _messages = []; // List to hold messages
+  String? apiKey;
+
 
   Future<void> sendMessage(String message) async {
     // Add user message to the list
@@ -26,20 +28,21 @@ class _ChatWidgetState extends State<ChatWidget> {
       _messages.add(Message(content: message, isUser: true));
     });
 
-    // Call the OpenAI API
-    final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/chat/completions'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_KEY', // Replace with your API key
-      },
-      body: json.encode({
-        'model': 'gpt-3.5-turbo',
-        'messages': [
-          {'role': 'user', 'content': message},
-        ],
-      }),
-    );
+  final formattedMessage = 'As a medical professional, please respond to the following inquiry: $message';
+
+  final response = await http.post(
+    Uri.parse('https://api.openai.com/v1/chat/completions'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ', // Use your API key
+    },
+    body: json.encode({
+      'model': 'gpt-4o-mini', // Make sure this is a valid model
+      'messages': [
+        {'role': 'user', 'content': formattedMessage},
+      ],
+    }),
+  );
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
