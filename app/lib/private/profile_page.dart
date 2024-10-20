@@ -16,6 +16,7 @@ late TextEditingController _numberController;
 late TextEditingController _addressController;
 late TextEditingController _phoneController;
 late TextEditingController _emailController;
+late TextEditingController _ageController;
 String _sexOption = 'Male';
 
 class ProfilePageState extends State<ProfilePage> {
@@ -41,6 +42,7 @@ class ProfilePageState extends State<ProfilePage> {
     _phoneController = TextEditingController(text: '1234567890');
     _emailController =
         TextEditingController(text: 'buckeye.1@buckeyemail.osu.edu');
+    _ageController = TextEditingController(text: '25');
     _checkedItems = List.generate(_healthItems.length, (index) => false);
     _checkedItems[4] = true;
   }
@@ -114,7 +116,8 @@ class ProfilePageState extends State<ProfilePage> {
                               Text(
                                 'My Info:',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 20, fontWeight: FontWeight.bold,color: Colors.black),
+                                    
                               ),
                               SizedBox(height: 20),
                               TextFormField(
@@ -262,7 +265,7 @@ class ProfilePageState extends State<ProfilePage> {
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.green,
+                                    color: Colors.black,
                                   ),
                                 ),
                                 SizedBox(height: 10),
